@@ -110,6 +110,9 @@ public:
 	/** Returns the maximum size of this squad (i.e. size of a full squad). */
 	int maxSize();
 
+	/** Returns the number of members of a given type in the squad */
+	int countMembersOfType(UnitType type);
+
 	/** Called each update to issue orders. */
 	virtual void computeActions();
 

@@ -7,7 +7,7 @@ Config* Config::instance = NULL;
 Config::Config()
 {
 	version = "15.4";
-	botName = "OpprimoBot";
+	botName = "OpprimoMetaBot";
 
 	stringstream ss;
 	ss << "\x1C";

@@ -829,6 +829,16 @@ int Squad::getSize()
 	return no;
 }
 
+int Squad::countMembersOfType(UnitType type){
+	int count = 0;
+	for (auto &a : agents)	{
+		if (a->isAlive() && !a->getUnit()->isBeingConstructed() && a->isOfType(type)) {
+			count++;
+		}
+	}
+	return count;
+}
+
 int Squad::getTotalUnits()
 {
 	int tot = 0;

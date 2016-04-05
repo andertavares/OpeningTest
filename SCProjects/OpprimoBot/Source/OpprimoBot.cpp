@@ -26,8 +26,8 @@ void OpprimoBot::onStart()
 {
 	//Enable/disable file writing stuff
 	Profiler::getInstance()->disable();
-	Statistics::getInstance()->disable();
-	StrategySelector::getInstance()->disable();
+	Statistics::getInstance()->enable();
+	StrategySelector::getInstance()->enable();
 
 	Profiler::getInstance()->start("OnInit");
 
@@ -82,7 +82,7 @@ void OpprimoBot::onStart()
 	//End Debug mode
 
 	//Set speed
-	speed = 0;
+	speed = 5;
 	Broodwar->setLocalSpeed(speed);
 
 	Profiler::getInstance()->end("OnInit");

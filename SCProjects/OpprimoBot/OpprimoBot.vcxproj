@@ -87,7 +87,6 @@
       <ImportLibrary>$(IntDir)$(TargetName).lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
       <AdditionalDependencies>../lib/BWAPI.lib;../lib/BWTA.lib;../lib/libCGAL-vc120-mt-4.4.lib;../lib/libboost_thread-vc120-mt-1_56.lib;../lib/libboost_system-vc120-mt-1_56.lib;../lib/libboost_filesystem-vc120-mt-1_56.lib;../lib/libgmp-10.lib;../lib/libmpfr-4.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>../../../bwapi-data/AI/$(TargetName)$(TargetExt)</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -103,6 +102,8 @@
     <ClCompile Include="Source\Commander\Zerg\LurkerRush.cpp" />
     <ClCompile Include="Source\Commander\Zerg\ZergMain.cpp" />
     <ClCompile Include="Source\Dll.cpp" />
+    <ClCompile Include="Source\Evaluators\EconomyEvaluator.cpp" />
+    <ClCompile Include="Source\Evaluators\MilitaryEvaluator.cpp" />
     <ClCompile Include="Source\Influencemap\MapManager.cpp" />
     <ClCompile Include="Source\MainAgents\AgentFactory.cpp" />
     <ClCompile Include="Source\MainAgents\BaseAgent.cpp" />
@@ -166,6 +167,8 @@
     <ClInclude Include="Source\Commander\UnitSetup.h" />
     <ClInclude Include="Source\Commander\Zerg\LurkerRush.h" />
     <ClInclude Include="Source\Commander\Zerg\ZergMain.h" />
+    <ClInclude Include="Source\Evaluators\EconomyEvaluator.h" />
+    <ClInclude Include="Source\Evaluators\MilitaryEvaluator.h" />
     <ClInclude Include="Source\Influencemap\MapManager.h" />
     <ClInclude Include="Source\MainAgents\AgentFactory.h" />
     <ClInclude Include="Source\MainAgents\BaseAgent.h" />

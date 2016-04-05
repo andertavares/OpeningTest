@@ -1,4 +1,5 @@
 #include "TerranMain.h"
+#include "../../Evaluators/EconomyEvaluator.h"
 #include "../../Managers/BuildplanEntry.h"
 #include "../../Managers/AgentManager.h"
 #include "../ExplorationSquad.h"
@@ -69,7 +70,7 @@ void TerranMain::computeActions()
 	if (noWorkers > 30) noWorkers = 30;
 
 	int cSupply = Broodwar->self()->supplyUsed() / 2;
-	int min = Broodwar->self()->minerals();
+	int minerals = Broodwar->self()->minerals();
 	int gas = Broodwar->self()->gas();
 
 	if (cSupply >= 20 && stage == 0)
@@ -81,7 +82,7 @@ void TerranMain::computeActions()
 
 		stage++;
 	}
-	if (cSupply >= 30 && min > 200 && stage == 1)
+	if (cSupply >= 30 && minerals > 200 && stage == 1)
 	{
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, cSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Armory, cSupply));
@@ -92,7 +93,7 @@ void TerranMain::computeActions()
 
 		stage++;
 	}
-	if (cSupply >= 45 && min > 200 && stage == 2)
+	if (cSupply >= 45 && minerals > 200 && stage == 2)
 	{
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, cSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, cSupply));
@@ -157,4 +158,97 @@ void TerranMain::computeActions()
 		
 		stage++;
 	}
+	else {
+		//situation does not fit any previous conditions, will take some default actions
+		defaultAction();
+	}
+
+}
+
+void TerranMain::defaultAction(){
+	if (buildplan.size() > 0) return;	//skips doing anything if buildplan is not satisfied
+	if (Broodwar->elapsedTime() - lastTimeChecked < 30) return;	//check every 30 seconds
+
+
+	EconomyStrength economyStrength = EconomyEvaluator::getInstance()->evaluateEconomy();
+	int currentSupply = Broodwar->self()->supplyUsed() / 2;
+
+	int numberSCVs = AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_SCV);
+	int numberCCs = 0;
+	Unitset myUnits = Broodwar->self()->getUnits();
+	for (auto a : myUnits){
+		if (a->getType() == UnitTypes::Terran_Command_Center)  numberCCs++;
+	}
+	if (numberSCVs < 60 && numberSCVs / numberCCs < 15){	//we want at least 15 SCVs per base at the limit of 60
+		mainSquad->addSetup(UnitTypes::Terran_SCV, 5);
+	}
+
+	if (economyStrength == ABUNDANT){
+		Broodwar->printf("Abundant economy :-D");
+
+		enhanceMilitary();
+		techUp();
+		doUpgrades();
+	}
+	else if (economyStrength == STRONG){
+		Broodwar->printf("Strong economy :-)");
+		expand();
+		enhanceMilitary();
+		techUp();
+	}
+	else if (economyStrength == INTERMEDIATE){
+		Broodwar->printf("Intermediate economy :-|");
+		//expand or military up
+		enhanceMilitary();
+	}
+	else if (economyStrength == WEAK){
+		Broodwar->printf("Weak economy :(");
+		//militaryUp
+		enhanceMilitary();
+	}
+
+	lastTimeChecked = Broodwar->elapsedTime();
+}
+
+void TerranMain::enhanceMilitary(){
+	AgentManager* agentManager = AgentManager::getInstance();
+	int numberTanks = agentManager->countNoUnits(UnitTypes::Terran_Siege_Tank_Siege_Mode) + agentManager->countNoUnits(UnitTypes::Terran_Siege_Tank_Tank_Mode);
+	int numberMarines = agentManager->countNoUnits(UnitTypes::Terran_Marine);
+	int numberMedics = agentManager->countNoUnits(UnitTypes::Terran_Medic);
+
+	if (numberTanks < 16){
+		mainSquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
+	}
+
+	if (numberMarines < 40){
+		mainSquad->addSetup(UnitTypes::Terran_Marine, 10);
+	}
+
+	if (numberMedics < numberMarines / 3){
+		mainSquad->addSetup(UnitTypes::Terran_Medic, 3);
+	}
+
+	//TODO: count number of buildings that produce military and decide whether to produce more
+}
+
+void TerranMain::techUp(){
+	Broodwar->printf("I don't know how to tech up yet :(");
+}
+
+void TerranMain::doUpgrades(){
+	Broodwar->printf("I don't know how to upgrade up yet :(");
+}
+
+void TerranMain::expand(){
+
+	//skips adding expansion to the plan if it's already there
+	for (size_t i = 0; i < buildplan.size(); i++) {
+		if (buildplan.at(i).unittype == UnitTypes::Terran_Command_Center) {
+			return;
+		}
+
+	}
+	int currentSupply = Broodwar->self()->supplyUsed() / 2;
+
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, currentSupply));
 }
