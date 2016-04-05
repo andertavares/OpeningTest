@@ -22,6 +22,9 @@ public:
 	/** Creates an object from a unit reference. */
 	SpottedObject(Unit mUnit);
 
+	/** Incorporate updated information from the recently seen unit */
+	void update(Unit mUnit);
+
 	/** Returns the unique id of the spotted unit. */
 	int getUnitID();
 

@@ -49,6 +49,12 @@ void ExplorationManager::computeActions()
 			a->frameVisited = Broodwar->getFrameCount();
 		}
 	}
+
+	for (auto &unit : Broodwar->enemy()->getUnits()){
+		if (unit->isVisible()){
+			addSpottedUnit(unit);
+		}
+	}
 }
 
 TilePosition ExplorationManager::searchExpansionSite()
@@ -128,11 +134,21 @@ void ExplorationManager::printInfo() {
 		//}
 	}
 
+	for (auto enemyUnit : enemyUnits) {
+		//if (enemyBldg-> isActive()){
+		int x1 = enemyUnit->getTilePosition().x * 32;
+		int y1 = enemyUnit->getTilePosition().y * 32;
+		int x2 = x1 + 32;
+		int y2 = y1 + 32;
+
+		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Grey, true);
+		//}
+	}
+
 	//Draw a circle around detectors
 }
 
-void ExplorationManager::addSpottedUnit(Unit unit)
-{
+void ExplorationManager::addSpottedUnit(Unit unit) {
 	if (unit->getType().isBuilding()) {
 		//Check if we already have seen this building
 		bool found = false;
@@ -147,19 +163,38 @@ void ExplorationManager::addSpottedUnit(Unit unit)
 			enemyBuildings.insert(new SpottedObject(unit));
 		}
 	}
+	else {	//not a building
+		bool found = false;
+		for (auto &a : enemyUnits) {
+			if (a->getUnitID() == unit->getID()) {
+				found = true;
+				a->update(unit); //updates information from the recently seen unit
+				break;
+			}
+		}
+
+		if (!found) {
+			enemyUnits.insert(new SpottedObject(unit));
+		}
+	}
 }
 
-void ExplorationManager::unitDestroyed(Unit unit)
-{
+void ExplorationManager::unitDestroyed(Unit unit) {
 	TilePosition uPos = unit->getTilePosition();
-	if (unit->getType().isBuilding())
-	{
+
+	if (unit->getType().isBuilding()) {
 		bool removed = false;
-		for (auto &a : enemyBuildings)
-		{
-			if (a->isAt(unit->getTilePosition()))
-			{
+		for (auto &a : enemyBuildings) {
+			if (a->isAt(unit->getTilePosition())) {
 				enemyBuildings.erase(a);
+				return;
+			}
+		}
+	}
+	else {	//not a building
+		for (auto &a : enemyUnits) {
+			if (a->getUnitID() == unit->getID()) {
+				enemyUnits.erase(a);
 				return;
 			}
 		}

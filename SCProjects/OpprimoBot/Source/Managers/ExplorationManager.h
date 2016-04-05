@@ -46,6 +46,7 @@ class ExplorationManager {
 
 private:
 	SpottedObjectSet enemyBuildings;
+	SpottedObjectSet enemyUnits;
 	RegionSet explore;
 	
 	ExplorationManager();

@@ -8,6 +8,19 @@ SpottedObject::SpottedObject(Unit mUnit)
 	unitID = mUnit->getID();
 }
 
+void SpottedObject::update(Unit mUnit){
+
+	if (unitID != mUnit->getID()) {
+		Broodwar->printf("Warning, attempted updating units with diff IDs (expected=%d, received=%d)", unitID, mUnit->getID());
+		return;
+	}
+
+	type = mUnit->getType();
+	position = mUnit->getPosition();
+	tilePosition = mUnit->getTilePosition();
+	
+}
+
 int SpottedObject::getUnitID()
 {
 	return unitID;
@@ -36,3 +49,5 @@ bool SpottedObject::isAt(TilePosition tilePos)
 	}
 	return false;
 }
+
+
