@@ -357,6 +357,19 @@ int AgentManager::countNoFinishedUnits(UnitType type)
 	return cnt;
 }
 
+int AgentManager::countUnloadedUnits(UnitType type)
+{
+	int count = 0;
+	for (auto &a : agents) {
+		//if (a->isAlive()) {
+			if (a->isOfType(type) && a->isAlive() && !a->getUnit()->isBeingConstructed() && !a->getUnit()->isLoaded()) {
+				count++;
+			}
+		//}
+	}
+	return count;
+}
+
 int AgentManager::countNoBases()
 {
 	int cnt = 0;

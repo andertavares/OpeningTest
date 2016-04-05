@@ -115,43 +115,36 @@ TilePosition ExplorationManager::getNextToExplore(Squad* squad)
 	return nextPos;
 }
 
-void ExplorationManager::printInfo()
-{
+void ExplorationManager::printInfo() {
 	//Uncomment this if you want to draw a mark at detected enemy buildings.
-	/*for (int i = 0; i < (int)spottedBuildings.size(); i++)
-	{
-		if (spottedBuildings.at(i)->isActive())
-		{
-			int x1 = spottedBuildings.at(i)->getTilePosition().x * 32;
-			int y1 = spottedBuildings.at(i)->getTilePosition().y * 32;
+	for (auto enemyBldg : enemyBuildings) {
+		//if (enemyBldg-> isActive()){
+			int x1 = enemyBldg->getTilePosition().x * 32;
+			int y1 = enemyBldg->getTilePosition().y * 32;
 			int x2 = x1 + 32;
 			int y2 = y1 + 32;
 
 			Broodwar->drawBoxMap(x1,y1,x2,y2,Colors::Blue,true);
-		}
-	}*/
+		//}
+	}
 
 	//Draw a circle around detectors
 }
 
 void ExplorationManager::addSpottedUnit(Unit unit)
 {
-	if (unit->getType().isBuilding())
-	{
+	if (unit->getType().isBuilding()) {
 		//Check if we already have seen this building
 		bool found = false;
-		for (auto &a : enemy)
-		{
-			if (a->getUnitID() == unit->getID())
-			{
+		for (auto &a : enemyBuildings) {
+			if (a->getUnitID() == unit->getID()) {
 				found = true;
 				break;
 			}
 		}
 
-		if (!found)
-		{
-			enemy.insert(new SpottedObject(unit));
+		if (!found) {
+			enemyBuildings.insert(new SpottedObject(unit));
 		}
 	}
 }
@@ -162,11 +155,11 @@ void ExplorationManager::unitDestroyed(Unit unit)
 	if (unit->getType().isBuilding())
 	{
 		bool removed = false;
-		for (auto &a : enemy)
+		for (auto &a : enemyBuildings)
 		{
 			if (a->isAt(unit->getTilePosition()))
 			{
-				enemy.erase(a);
+				enemyBuildings.erase(a);
 				return;
 			}
 		}
@@ -180,7 +173,7 @@ void ExplorationManager::cleanup()
 	while (cont)
 	{
 		cont = false;
-		for (auto &a : enemy)
+		for (auto &a : enemyBuildings)
 		{
 			if (Broodwar->isVisible(a->getTilePosition()))
 			{
@@ -198,7 +191,7 @@ void ExplorationManager::cleanup()
 				}
 				if (!found)
 				{
-					enemy.erase(a);
+					enemyBuildings.erase(a);
 					cont = true;
 					break;
 				}
@@ -210,7 +203,7 @@ void ExplorationManager::cleanup()
 int ExplorationManager::getSpottedInfluenceInRegion(const BWTA::Region* region)
 {
 	int im = 0;
-	for (auto &a : enemy)
+	for (auto &a : enemyBuildings)
 	{
 		if (region->getPolygon().isInside(a->getPosition()))
 		{
@@ -227,7 +220,7 @@ TilePosition ExplorationManager::getClosestSpottedBuilding(TilePosition start)
 	TilePosition pos = TilePosition(-1, -1);
 	double bestDist = 100000;
 
-	for (auto &a : enemy)
+	for (auto &a : enemyBuildings)
 	{
 		double cDist = start.getDistance(a->getTilePosition());
 		if (cDist < bestDist)

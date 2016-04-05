@@ -19,11 +19,11 @@ MilitaryEvaluator* MilitaryEvaluator::getInstance() {
 
 
 
-MilitaryWeight MilitaryEvaluator::evaluateAirCombat(){
+MilitaryWeight MilitaryEvaluator::evaluateEnemyAir(){
 	return NONE;
 }
 
-MilitaryWeight MilitaryEvaluator::evaluateLandCombat(){
+MilitaryWeight MilitaryEvaluator::evaluateEnemyLand(){
 	//
 
 	return NONE;

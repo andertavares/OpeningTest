@@ -771,6 +771,42 @@ void Commander::printInfo()
 		Broodwar->drawLineScreen(300,40+no*16,480,40+no*16,Colors::Orange);
 		Constructor::getInstance()->printInfo();
 	}
+
+	//debug enemy info
+	ExplorationManager::getInstance()->printInfo();
+
+
+	//debug unit counting
+	Broodwar->drawBoxScreen(298, 90, 482, 166, Colors::Black, true);
+	Broodwar->drawTextScreen(300, 90, "\x03Unit count");
+	Broodwar->drawLineScreen(300, 106, 480, 106, Colors::Orange);
+	stringstream ss;
+	ss << "Worker: " << AgentManager::getInstance()->getNoWorkers() << endl;
+	//Broodwar->drawTextScreen(300, 108, ss.str().c_str());
+
+	ss.clear();
+	ss << "Marine (total): " << AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Marine) << endl;
+	ss << "Marine (unloaded): " << AgentManager::getInstance()->countUnloadedUnits(UnitTypes::Terran_Marine) << endl;
+	//Broodwar->drawTextScreen(300, 124, ss.str().c_str());
+
+	ss.clear();
+	ss << "Medic: " << AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Medic) << endl;
+	//Broodwar->drawTextScreen(300, 130, ss.str().c_str());
+
+	ss.clear();
+	ss << "Tank (siege): " << AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Siege_Tank_Siege_Mode) << endl;
+	ss << "Tank (tank): " << AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Siege_Tank_Tank_Mode) << endl;
+	//Broodwar->drawTextScreen(300, 146, ss.str().c_str());
+
+	ss.clear();
+	ss << "Goliath: " << AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Goliath) << endl;
+	//Broodwar->drawTextScreen(300, 162, ss.str().c_str());
+
+	ss.clear();
+	ss << "Vulture: " << AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Vulture);
+	//Broodwar->drawTextScreen(300, 178, ss.str().c_str());
+	Broodwar->drawTextScreen(300, 108, ss.str().c_str());
+	Broodwar->drawLineScreen(300, 230, 480, 230, Colors::Orange);
 }
 
 int Commander::addBunkerSquad()

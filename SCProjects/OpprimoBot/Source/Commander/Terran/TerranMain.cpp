@@ -7,7 +7,7 @@
 
 TerranMain::TerranMain()
 {
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 9));
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 8));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, 9));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Refinery, 12));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, 14));
@@ -66,8 +66,8 @@ void TerranMain::computeActions()
 {
 	computeActionsBase();
 
-	noWorkers = 12 * AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Command_Center) + 2 * AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Refinery);
-	if (noWorkers > 30) noWorkers = 30;
+	noWorkers = 12 * AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Command_Center) + 2 * AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Refinery);
+	if (noWorkers > 60) noWorkers = 60;
 
 	int cSupply = Broodwar->self()->supplyUsed() / 2;
 	int minerals = Broodwar->self()->minerals();
@@ -173,15 +173,16 @@ void TerranMain::defaultAction(){
 	EconomyStrength economyStrength = EconomyEvaluator::getInstance()->evaluateEconomy();
 	int currentSupply = Broodwar->self()->supplyUsed() / 2;
 
-	int numberSCVs = AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_SCV);
+	int numberSCVs = AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_SCV);
 	int numberCCs = 0;
 	Unitset myUnits = Broodwar->self()->getUnits();
 	for (auto a : myUnits){
 		if (a->getType() == UnitTypes::Terran_Command_Center)  numberCCs++;
 	}
-	if (numberSCVs < 60 && numberSCVs / numberCCs < 15){	//we want at least 15 SCVs per base at the limit of 60
-		mainSquad->addSetup(UnitTypes::Terran_SCV, 5);
-	}
+	/*if (numberSCVs < 60 && numberSCVs / numberCCs < 15){	//we want at least 15 SCVs per base at the limit of 60
+		mainSquad->addSetup(UnitTypes::Terran_SCV, 1);
+
+	}*/
 
 	if (economyStrength == ABUNDANT){
 		Broodwar->printf("Abundant economy :-D");
@@ -213,19 +214,39 @@ void TerranMain::defaultAction(){
 void TerranMain::enhanceMilitary(){
 	AgentManager* agentManager = AgentManager::getInstance();
 	int numberTanks = agentManager->countNoUnits(UnitTypes::Terran_Siege_Tank_Siege_Mode) + agentManager->countNoUnits(UnitTypes::Terran_Siege_Tank_Tank_Mode);
-	int numberMarines = agentManager->countNoUnits(UnitTypes::Terran_Marine);
+	int unloadedMarines = agentManager->countUnloadedUnits(UnitTypes::Terran_Marine);
+
 	int numberMedics = agentManager->countNoUnits(UnitTypes::Terran_Medic);
+	int numberGoliaths = agentManager->countNoUnits(UnitTypes::Terran_Goliath);
+	int numberVultures = agentManager->countNoUnits(UnitTypes::Terran_Vulture);
+	int numBunkers = agentManager->countNoUnits(UnitTypes::Terran_Bunker);
 
-	if (numberTanks < 16){
-		mainSquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
+	int currentSupply = Broodwar->self()->supplyUsed() / 2;
+
+
+	if (numberTanks < 12){
+		secondarySquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
 	}
 
-	if (numberMarines < 40){
-		mainSquad->addSetup(UnitTypes::Terran_Marine, 10);
+	if (unloadedMarines < 40){
+		secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
 	}
 
-	if (numberMedics < numberMarines / 3){
-		mainSquad->addSetup(UnitTypes::Terran_Medic, 3);
+	if (numberMedics < unloadedMarines / 3){
+		secondarySquad->addSetup(UnitTypes::Terran_Medic, 3);
+	}
+
+	if (numberGoliaths < 8){
+		secondarySquad->addSetup(UnitTypes::Terran_Goliath, 2);
+	}
+
+	if (numberVultures < 8){
+		secondarySquad->addSetup(UnitTypes::Terran_Vulture, 2);
+	}
+
+	int desiredNumBunkers = 2 * agentManager->countNoBases();
+	if (numBunkers < desiredNumBunkers) {
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, currentSupply));
 	}
 
 	//TODO: count number of buildings that produce military and decide whether to produce more

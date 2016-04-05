@@ -82,7 +82,7 @@ void OpprimoBot::onStart()
 	//End Debug mode
 
 	//Set speed
-	speed = 5;
+	speed = 0;
 	Broodwar->setLocalSpeed(speed);
 
 	Profiler::getInstance()->end("OnInit");

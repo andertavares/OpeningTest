@@ -41,6 +41,6 @@ EconomyStrength EconomyEvaluator::evaluateEconomy() {
 
 	if (mineralLevel == LOW || gasLevel == LOW)  return WEAK;
 	if (mineralLevel == INTERMEDIATE || gasLevel == INTERMEDIATE)  return FAIR;
-	if (mineralLevel == HIGH || gasLevel == HIGH) return STRONG;
+	if (mineralLevel == HIGH) return STRONG;
 	return ABUNDANT;
 }

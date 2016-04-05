@@ -70,6 +70,9 @@ public:
 	 * in construction. */
 	int countNoFinishedUnits(UnitType type);
 
+	/** Counts units of the given type outside a Transport/Bunker */
+	int countUnloadedUnits(UnitType type);
+
 	/** Returns the number of units or buildings of the specified type
 	 * that currently is in production. */
 	int noInProduction(UnitType type);
