@@ -148,6 +148,10 @@ public:
 	/** Forces an attack, even if some squads are not full. */
 	void forceAttack();
 
+	/** Returns the build plan */
+	vector<BuildplanEntry>& getBuildPlan();
+
+	
 	/** Shows some info on the screen. */
 	void printInfo();
 

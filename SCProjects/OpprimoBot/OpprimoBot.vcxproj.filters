@@ -187,6 +187,9 @@
     <ClCompile Include="Source\Evaluators\MilitaryEvaluator.cpp">
       <Filter>Evaluators</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Managers\TechManager.cpp">
+      <Filter>Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -376,6 +379,9 @@
     </ClInclude>
     <ClInclude Include="Source\Evaluators\MilitaryEvaluator.h">
       <Filter>Evaluators</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Managers\TechManager.h">
+      <Filter>Managers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,6 @@
 #include "TerranMain.h"
 #include "../../Evaluators/EconomyEvaluator.h"
+#include "../../Evaluators/MilitaryEvaluator.h"
 #include "../../Managers/BuildplanEntry.h"
 #include "../../Managers/AgentManager.h"
 #include "../ExplorationSquad.h"
@@ -223,6 +224,42 @@ void TerranMain::enhanceMilitary(){
 
 	int currentSupply = Broodwar->self()->supplyUsed() / 2;
 
+	MilitaryForce enemyLand = MilitaryEvaluator::getInstance()->evaluateEnemyLand();
+	MilitaryForce enemyAir = MilitaryEvaluator::getInstance()->evaluateEnemyAir();
+
+	if (enemyLand == HEAVY_MANY || enemyLand == HEAVY_FEW || enemyLand == MIXED_MANY) {	//respond with tanks
+		//techUpTo(Tank)
+		backupSquad1->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 8);
+		secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
+		secondarySquad->addSetup(UnitTypes::Terran_Medic, 3);
+		Broodwar->printf("Responding to HEAVY enemy LAND.");
+	}
+
+	if (enemyLand == LIGHT_MANY || enemyLand == LIGHT_FEW || enemyLand == MIXED_FEW) {	//respond with infantry
+		//techUpTo(Firebat, Medic)
+		secondarySquad->addSetup(UnitTypes::Terran_Vulture, 8);
+		//secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
+		secondarySquad->addSetup(UnitTypes::Terran_Medic, 1);
+		secondarySquad->addSetup(UnitTypes::Terran_Firebat, 3);	//TODO: check if Firebat is being micro'ed
+		Broodwar->printf("Responding to LIGHT enemy LAND.");
+	}
+
+	if (enemyAir == HEAVY_MANY || enemyAir == HEAVY_FEW || enemyAir == MIXED_MANY) {	//respond with tanks
+		//techUpTo(Goliath, Wraith)
+		backupSquad1->addSetup(UnitTypes::Terran_Goliath, 8);
+		backupSquad1->addSetup(UnitTypes::Terran_Wraith, 8);
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
+		Broodwar->printf("Responding to HEAVY enemy AIR.");
+	}
+
+	if (enemyAir == LIGHT_MANY || enemyAir == LIGHT_FEW || enemyAir == MIXED_FEW) {	//respond with infantry
+		//techUpTo(Firebat, Medic)
+		backupSquad1->addSetup(UnitTypes::Terran_Goliath, 4);
+		backupSquad1->addSetup(UnitTypes::Terran_Wraith, 4);
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
+		Broodwar->printf("Responding to LIGHT enemy AIR.");
+	}
 
 	if (numberTanks < 12){
 		secondarySquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);

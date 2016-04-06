@@ -9,6 +9,7 @@
 #include "Influencemap/MapManager.h"
 #include "Managers/ExplorationManager.h"
 #include "Managers/Constructor.h"
+#include "Managers\TechManager.h"
 #include "Commander/StrategySelector.h"
 
 AIloop::AIloop()
@@ -60,18 +61,26 @@ void AIloop::computeActions()
 	Profiler::getInstance()->start("OnFrame_MapManager");
 	MapManager::getInstance()->update();
 	Profiler::getInstance()->end("OnFrame_MapManager");
+	
 	Profiler::getInstance()->start("OnFrame_Constructor");
 	Constructor::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_Constructor");
+	
 	Profiler::getInstance()->start("OnFrame_Commander");
 	Commander::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_Commander");
+	
 	Profiler::getInstance()->start("OnFrame_ExplorationManager");
 	ExplorationManager::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_ExplorationManager");
+	
 	Profiler::getInstance()->start("OnFrame_AgentManager");
 	AgentManager::getInstance()->computeActions();
 	Profiler::getInstance()->end("OnFrame_AgentManager");
+
+	Profiler::getInstance()->start("OnFrame_TechManager");
+	TechManager::getInstance()->computeActions();
+	Profiler::getInstance()->end("OnFrame_TechManager");
 }
 
 void AIloop::addUnit(Unit unit)

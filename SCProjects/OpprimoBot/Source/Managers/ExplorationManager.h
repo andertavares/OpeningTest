@@ -12,7 +12,8 @@ using namespace std;
 class SpottedObjectSet : public SetContainer<SpottedObject*, std::hash<void*>>
 {
 public:
-
+	/** Counts the number of units of a given type present in this set */
+	int countUnitsOfType(UnitType type);
 };
 
 class RegionItem
@@ -68,6 +69,12 @@ public:
 
 	/** Called each update to issue orders. */
 	void computeActions();
+
+	/** Returns the spotted enemy units (excluding buildings) */
+	SpottedObjectSet& getSpottedUnits();
+
+	/** Return spotted enemy buildings (excluding units) */
+	SpottedObjectSet& getSpottedBuildings();
 
 	/** Returns the next position to explore for this squad. */
 	TilePosition getNextToExplore(Squad* squad);

@@ -656,6 +656,10 @@ bool Commander::checkDamagedBuildings()
 	return false;
 }
 
+vector<BuildplanEntry>& Commander::getBuildPlan(){
+	return buildplan;
+}
+
 void Commander::toggleBuildplanDebug()
 {
 	debug_bp = !debug_bp;

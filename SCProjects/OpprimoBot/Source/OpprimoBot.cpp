@@ -1,6 +1,7 @@
 #include "OpprimoBot.h"
 #include "Managers/Constructor.h"
 #include "Managers/ExplorationManager.h"
+#include "Managers\TechManager.h"
 #include "Influencemap/MapManager.h"
 #include "Managers/BuildingPlacer.h"
 #include "Commander/Commander.h"
@@ -51,6 +52,7 @@ void OpprimoBot::onStart()
 	BuildingPlacer::getInstance();
 	Constructor::getInstance();
 	Upgrader::getInstance();
+	TechManager::getInstance();
 	ResourceManager::getInstance();
 	Pathfinder::getInstance();
 

@@ -3,6 +3,16 @@
 
 ExplorationManager* ExplorationManager::instance = NULL;
 
+int SpottedObjectSet::countUnitsOfType(UnitType type){
+	int count = 0;
+	for (SpottedObjectSet::iterator it = this->begin(); it != this->end(); it++){
+		if ((*it)->getType() == type){
+			count++;
+		}
+	}
+	return count;
+}
+
 ExplorationManager::ExplorationManager()
 {
 	//Add the regions for this map
@@ -55,6 +65,14 @@ void ExplorationManager::computeActions()
 			addSpottedUnit(unit);
 		}
 	}
+}
+
+SpottedObjectSet& ExplorationManager::getSpottedBuildings(){
+	return enemyBuildings;
+}
+
+SpottedObjectSet& ExplorationManager::getSpottedUnits(){
+	return enemyUnits;
 }
 
 TilePosition ExplorationManager::searchExpansionSite()

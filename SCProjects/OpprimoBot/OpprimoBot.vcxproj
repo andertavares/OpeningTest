@@ -116,6 +116,7 @@
     <ClCompile Include="Source\Managers\ExplorationManager.cpp" />
     <ClCompile Include="Source\Managers\ResourceManager.cpp" />
     <ClCompile Include="Source\Managers\SpottedObject.cpp" />
+    <ClCompile Include="Source\Managers\TechManager.cpp" />
     <ClCompile Include="Source\Managers\Upgrader.cpp" />
     <ClCompile Include="Source\OpprimoBot.cpp" />
     <ClCompile Include="Source\Pathfinding\NavigationAgent.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="Source\Managers\ExplorationManager.h" />
     <ClInclude Include="Source\Managers\ResourceManager.h" />
     <ClInclude Include="Source\Managers\SpottedObject.h" />
+    <ClInclude Include="Source\Managers\TechManager.h" />
     <ClInclude Include="Source\Managers\Upgrader.h" />
     <ClInclude Include="Source\OpprimoBot.h" />
     <ClInclude Include="Source\Pathfinding\NavigationAgent.h" />
