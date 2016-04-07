@@ -70,15 +70,15 @@ void TerranMain::computeActions()
 {
 	computeActionsBase();
 
-	noWorkers = 12 * AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Command_Center) + 2 * AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Refinery);
+	noWorkers = 15 * AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Command_Center) + 2 * AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Refinery);
 	if (noWorkers > 60) noWorkers = 60;
 
 	int cSupply = Broodwar->self()->supplyUsed() / 2;
 	int minerals = Broodwar->self()->minerals();
 	int gas = Broodwar->self()->gas();
 
-	//select a worker to scout: between 1 and 10 minutes of game, with 9 supply, if nobody else is scouting
-	if (scout2->getMembers().size() == 0 && Broodwar->elapsedTime() > 60 && Broodwar->elapsedTime() < 600 && cSupply == 8){
+	//select a worker to scout: between 1 and 10 minutes of game, with 8 supply, if nobody else is scouting
+	if (scout2->size() == 0 && Broodwar->elapsedTime() > 60 && Broodwar->elapsedTime() < 600 && cSupply == 8){
 		BaseAgent* freeWorker = AgentManager::getInstance()->findClosestFreeWorker(Broodwar->self()->getStartLocation());
 		if (freeWorker != NULL) {
 			scout2->addSetup(UnitTypes::Terran_SCV, 1);
@@ -86,8 +86,18 @@ void TerranMain::computeActions()
 			scout2->setPriority(1);
 			scout2->setActivePriority(1000);
 			scout2->forceActive();
-			//scout1->
-			squads.push_back(scout2);
+			//workaround double-push error
+			bool found = false;
+			for (auto a : squads){
+				if (a == scout2) {
+					found = true;
+					break;
+				}
+			}
+			if (!found) {
+				squads.push_back(scout2);
+				Broodwar->printf("Exploration squad created.");
+			}
 		}
 		else {
 			Broodwar->printf("ERROR: couldn't find free worker to scout.");
@@ -180,16 +190,15 @@ void TerranMain::computeActions()
 		
 		stage++;
 	}
-	//else {
+	else {
 		//situation does not fit any previous conditions, will take some default actions
-	
-	defaultAction();
-	//}
+		defaultAction();
+	}
 
 }
 
 void TerranMain::defaultAction(){
-	if (buildplan.size() > 0) return;	//skips doing anything if buildplan is not satisfied
+	if (buildplan.size() > 0 && Broodwar->elapsedTime() < 60 * 10) return;	//skips doing anything if buildplan is not satisfied before 10 minutes
 	if (Broodwar->elapsedTime() - lastTimeChecked < 5) return;	//check every 5 seconds
 	
 	lastTimeChecked = Broodwar->elapsedTime();

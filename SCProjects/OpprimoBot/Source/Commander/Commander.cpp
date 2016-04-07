@@ -1,5 +1,6 @@
 #include "Commander.h"
 #include "StrategySelector.h"
+#include "../Evaluators/MilitaryEvaluator.h"
 #include "../Managers/AgentManager.h"
 #include "../Managers/ExplorationManager.h"
 #include "../Influencemap/MapManager.h"
@@ -100,6 +101,12 @@ bool Commander::shallEngage()
 	{
 		//No enemy sighted. Dont launch attack.
 		return false;
+	}
+
+	//if i have strong military, attack
+	MilitaryForce myForce = MilitaryEvaluator::getInstance()->evaluateOurForces();
+	if (myForce == HEAVY_MANY || myForce == LIGHT_MANY || myForce == MIXED_MANY){
+		return true;
 	}
 
 	for (Squad* s : squads)
@@ -706,9 +713,11 @@ void Commander::printInfo()
 		}
 		if (totLines == 0) totLines++;
 
+		string forcesStr = MilitaryEvaluator::stringOf(MilitaryEvaluator::getInstance()->evaluateOurForces());
+
 		Broodwar->drawBoxScreen(168,25,292,41+totLines*16,Colors::Black,true);
-		if (currentState == DEFEND) Broodwar->drawTextScreen(170,25,"\x03Squads \x07(Defending)");
-		if (currentState == ATTACK) Broodwar->drawTextScreen(170,25,"\x03Squads \x08(Attacking)");
+		if (currentState == DEFEND) Broodwar->drawTextScreen(170, 25, "\x03Squads \x07(Defending) | Total: %s", forcesStr.c_str());
+		if (currentState == ATTACK) Broodwar->drawTextScreen(170, 25, "\x03Squads \x08(Attacking) | Total: %s", forcesStr.c_str());
 		Broodwar->drawLineScreen(170,39,290,39,Colors::Orange);
 		int no = 0;
 		for (Squad* s : squads)
@@ -720,6 +729,13 @@ void Commander::printInfo()
 
 			if (vis)
 			{
+				//debug goal
+				if (s->getGoal().isValid()){
+					for (auto member : s->getMembers()){
+						Broodwar->drawLineMap(member->getUnit()->getPosition(), Position(s->getGoal()), Colors::Blue);
+					}
+				}
+
 				int cSize = s->getSize();
 				int totSize = s->getTotalUnits();
 

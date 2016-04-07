@@ -2,6 +2,7 @@
 #define __MILITARYEVALUATOR_H__
 
 #include <BWAPI.h>
+#include <string>
 #include "../Managers/ExplorationManager.h"
 using namespace BWAPI;
 using namespace std;
@@ -35,6 +36,12 @@ public:
 
 	/** Returns whether prevalent combat units are light, heavy, mixed (or none) */
 	MilitaryForce evaluateEnemyLand();
+
+	/** Returns an evaluation of our military forces */
+	MilitaryForce evaluateOurForces();
+
+	/** Returns a string representation of the Military Force */
+	static string stringOf(MilitaryForce force);
 
 	/** Returns whether opponent forces has light melee and should be dealt accordingly */
 	bool shouldRespondLightMelee();
