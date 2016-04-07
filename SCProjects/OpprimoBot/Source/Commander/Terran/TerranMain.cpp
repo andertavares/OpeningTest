@@ -260,61 +260,88 @@ void TerranMain::enhanceMilitary(){
 	MilitaryForce enemyLand = MilitaryEvaluator::getInstance()->evaluateEnemyLand();
 	MilitaryForce enemyAir = MilitaryEvaluator::getInstance()->evaluateEnemyAir();
 
+	EconomyStrength economy = EconomyEvaluator::getInstance()->evaluateEconomy();
+
 	if (enemyLand == HEAVY_MANY || enemyLand == HEAVY_FEW || enemyLand == MIXED_MANY) {	//respond with tanks
 		//techUpTo(Tank)
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Siege_Tank_Siege_Mode);
-		backupSquad1->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 8);
-		secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
-		secondarySquad->addSetup(UnitTypes::Terran_Medic, 3);
+		secondarySquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 8);
+		mainSquad->addSetup(UnitTypes::Terran_Marine, 10);
+		mainSquad->addSetup(UnitTypes::Terran_Medic, 3);
+
+		
+		if (economy == STRONG || economy == ABUNDANT){
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+		}
+
 		Broodwar->printf("Responding to HEAVY enemy LAND.");
 	}
 
 	if (enemyLand == LIGHT_MANY || enemyLand == LIGHT_FEW || enemyLand == MIXED_FEW) {	//respond with infantry
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Firebat);
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Medic);
-		secondarySquad->addSetup(UnitTypes::Terran_Vulture, 8);
+		mainSquad->addSetup(UnitTypes::Terran_Vulture, 8);
 		//secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
-		secondarySquad->addSetup(UnitTypes::Terran_Medic, 1);
-		secondarySquad->addSetup(UnitTypes::Terran_Firebat, 3);	//TODO: check if Firebat is being micro'ed
+		mainSquad->addSetup(UnitTypes::Terran_Medic, 1);
+		mainSquad->addSetup(UnitTypes::Terran_Firebat, 3);	//TODO: check if Firebat is being micro'ed
+		
+		if (economy == STRONG || economy == ABUNDANT){
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+		}
+
 		Broodwar->printf("Responding to LIGHT enemy LAND.");
 	}
 
 	if (enemyAir == HEAVY_MANY || enemyAir == HEAVY_FEW || enemyAir == MIXED_MANY) {	//respond with anti-air
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Goliath);
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Wraith);
-		backupSquad1->addSetup(UnitTypes::Terran_Goliath, 8);
-		backupSquad1->addSetup(UnitTypes::Terran_Wraith, 8);
+		secondarySquad->addSetup(UnitTypes::Terran_Goliath, 8);
+		secondarySquad->addSetup(UnitTypes::Terran_Wraith, 8);
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
+
+		if (economy == STRONG || economy == ABUNDANT){
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Starport, currentSupply));
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+		}
+
 		Broodwar->printf("Responding to HEAVY enemy AIR.");
 	}
 
 	if (enemyAir == LIGHT_MANY || enemyAir == LIGHT_FEW || enemyAir == MIXED_FEW) {	//respond with anti-air
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Firebat);
-		backupSquad1->addSetup(UnitTypes::Terran_Goliath, 4);
-		backupSquad1->addSetup(UnitTypes::Terran_Wraith, 4);
+		secondarySquad->addSetup(UnitTypes::Terran_Goliath, 4);
+		secondarySquad->addSetup(UnitTypes::Terran_Wraith, 4);
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
+
+		if (economy == STRONG || economy == ABUNDANT){
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Starport, currentSupply));
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+		}
+
 		Broodwar->printf("Responding to LIGHT enemy AIR.");
 	}
 
 	if (numberTanks < 12){
-		secondarySquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
+		mainSquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
 	}
 
 	if (unloadedMarines < 40){
-		secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
+		mainSquad->addSetup(UnitTypes::Terran_Marine, 10);
 	}
 
 	if (numberMedics < unloadedMarines / 3){
-		secondarySquad->addSetup(UnitTypes::Terran_Medic, 3);
+		mainSquad->addSetup(UnitTypes::Terran_Medic, 3);
 	}
 
 	if (numberGoliaths < 8){
-		secondarySquad->addSetup(UnitTypes::Terran_Goliath, 2);
+		mainSquad->addSetup(UnitTypes::Terran_Goliath, 2);
 	}
 
 	if (numberVultures < 8){
-		secondarySquad->addSetup(UnitTypes::Terran_Vulture, 2);
+		mainSquad->addSetup(UnitTypes::Terran_Vulture, 2);
 	}
 
 	/*int desiredNumBunkers = agentManager->countNoBases();
