@@ -163,28 +163,22 @@ void OpprimoBot::onFrame()
 
 void OpprimoBot::onSendText(std::string text)
 {
-	if (text == "a")
-	{
+	if (text == "a") {
 		Commander::getInstance()->forceAttack();
 	}
-	else if (text == "p")
-	{
+	else if (text == "p") {
 		profile = !profile;
 	}
-	else if (text == "d")
-	{
+	else if (text == "d") {
 		loop.toggleDebug();
 	}
-	else if (text == "pf" && NavigationAgent::pathfinding_version == 2)
-	{
+	else if (text == "pf" && NavigationAgent::pathfinding_version == 2) {
 		loop.togglePFDebug();
 	}
-	else if (text == "bp")
-	{
+	else if (text == "bp") {
 		loop.toggleBPDebug();
 	}
-	else if (text == "spf")
-	{
+	else if (text == "spf") {
 		NavigationAgent::pathfinding_version++;
 		if (NavigationAgent::pathfinding_version > 2) NavigationAgent::pathfinding_version = 0;
 	}
@@ -228,9 +222,11 @@ void OpprimoBot::onSendText(std::string text)
 		Broodwar << "Changed game speed: " << speed << endl;
 		Broodwar->setLocalSpeed(speed);
 	}
-	else if (text == "t")
-	{
+	else if (text == "t") {
 		Upgrader::getInstance()->toggleDebug();
+	}
+	else if (text == "td") {
+		TechManager::getInstance()->toggleDebug();
 	}
 	else if (text == "s")
 	{

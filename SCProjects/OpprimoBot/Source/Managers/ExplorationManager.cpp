@@ -145,10 +145,11 @@ void ExplorationManager::printInfo() {
 		//if (enemyBldg-> isActive()){
 			int x1 = enemyBldg->getTilePosition().x * 32;
 			int y1 = enemyBldg->getTilePosition().y * 32;
-			int x2 = x1 + 32;
-			int y2 = y1 + 32;
-
-			Broodwar->drawBoxMap(x1,y1,x2,y2,Colors::Blue,true);
+			int x2 = x1 + enemyBldg->getType().dimensionRight() * 2;
+			int y2 = y1 + enemyBldg->getType().dimensionDown() * 2;
+			
+			Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Red, false);
+			Broodwar->drawTextMap(x1, x2, enemyBldg->getType().c_str());
 		//}
 	}
 
@@ -156,10 +157,11 @@ void ExplorationManager::printInfo() {
 		//if (enemyBldg-> isActive()){
 		int x1 = enemyUnit->getTilePosition().x * 32;
 		int y1 = enemyUnit->getTilePosition().y * 32;
-		int x2 = x1 + 32;
-		int y2 = y1 + 32;
+		int x2 = x1 + enemyUnit->getType().dimensionRight() * 2;
+		int y2 = y1 + enemyUnit->getType().dimensionDown() * 2;
 
-		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Grey, true);
+		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Orange, false);
+		Broodwar->drawTextMap(x1, x2, enemyUnit->getType().c_str());
 		//}
 	}
 

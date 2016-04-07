@@ -5,6 +5,7 @@
 #include "../Influencemap/MapManager.h"
 #include "../Managers/Constructor.h"
 #include "../Managers/Upgrader.h"
+#include "../Managers/TechManager.h"
 #include "../Pathfinding/Pathfinder.h"
 #include "../MainAgents/WorkerAgent.h"
 #include "../Utils/Profiler.h"
@@ -778,6 +779,8 @@ void Commander::printInfo()
 
 	//debug enemy info
 	ExplorationManager::getInstance()->printInfo();
+
+	TechManager::getInstance()->printInfo();
 
 
 	//debug unit counting

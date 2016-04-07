@@ -25,6 +25,7 @@ private:
 	static TechManager* instance;
 
 	int lastCallFrame;
+	bool debug;
 	AgentManager* agentManager;
 	vector<BuildplanEntry>& buildPlan;
 	map<UnitType, Status> unitJobs;		
@@ -42,6 +43,12 @@ public:
 
 	/** Performs actions when teching up */
 	void computeActions();
+
+	/** Switches between printing debug info on screen or not */
+	void toggleDebug();
+
+	/** Writes information on screen */
+	void printInfo();
 
 	/** Returns the Building that trains or researches the given Type */
 	UnitType getPrerequisiteFor(UnitType type);

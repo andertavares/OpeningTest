@@ -11,6 +11,7 @@ TechManager* TechManager::instance = NULL;
 
 TechManager::TechManager() : buildPlan(Commander::getInstance()->getBuildPlan()) {
 	lastCallFrame = 0;
+	debug = false;
 	agentManager = AgentManager::getInstance();
 	//buildPlan = Commander::getInstance()->getBuildPlan();
 }
@@ -24,6 +25,23 @@ TechManager* TechManager::getInstance(){
 		instance = new TechManager();
 	}
 	return instance;
+}
+
+void TechManager::toggleDebug(){
+	debug = !debug;
+	Broodwar->printf("TechManager debug set to %s", debug);
+}
+
+void TechManager::printInfo(){
+	Broodwar->drawBoxScreen(488, 90, 602, 200, Colors::Black, true);
+	Broodwar->drawTextScreen(490, 90, "\x03Tech Tree");
+	Broodwar->drawLineScreen(490, 106, 600, 106, Colors::Orange);
+
+	stringstream ss;
+	for (auto a : unitJobs)	{
+		ss << a.first.c_str() << "|" << a.second << endl;
+	}
+	Broodwar->drawTextScreen(490, 106, ss.str().c_str());
 }
 
 void TechManager::computeActions(){
@@ -43,12 +61,14 @@ void TechManager::computeActions(){
 			//if pre-requisite of pre-requisite is not satisfied, tech up to it
 			if (!preRequisitesSatisfiedFor(preReq.first)){
 				techUpTo(preReq.first); 
+				break;
 			}
 
-			//tests need of ordering the build of this pre-requisite (does not exist and is not in build plan)
+			//tests need of purchasing this pre-requisite (does not exist and is not in build plan)
 			if (agentManager->countNoUnits(preReq.first) == 0 && Constructor::getInstance()->noInProduction(preReq.first) == 0 && !inBuildPlan(preReq.first)){
 				buildPlan.push_back(BuildplanEntry(preReq.first, Broodwar->self()->supplyUsed() / 2));
-				//unitJobs.emplace(target.first, IN_PROGRESS);
+				Broodwar->printf("Teching up! Adding %s to build plan.", preReq.first.c_str());
+				unitJobs.emplace(target.first, IN_PROGRESS);
 			}
 			
 			//pre-requisite is on the way
