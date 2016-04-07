@@ -784,9 +784,9 @@ void Commander::printInfo()
 
 
 	//debug unit counting
-	Broodwar->drawBoxScreen(298, 90, 482, 166, Colors::Black, true);
+	Broodwar->drawBoxScreen(298, 90, 440, 166, Colors::Black, true);
 	Broodwar->drawTextScreen(300, 90, "\x03Unit count");
-	Broodwar->drawLineScreen(300, 106, 480, 106, Colors::Orange);
+	Broodwar->drawLineScreen(300, 106, 438, 106, Colors::Orange);
 	stringstream ss;
 	ss << "Worker: " << AgentManager::getInstance()->getNoWorkers() << endl;
 	//Broodwar->drawTextScreen(300, 108, ss.str().c_str());
@@ -813,7 +813,7 @@ void Commander::printInfo()
 	ss << "Vulture: " << AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Vulture);
 	//Broodwar->drawTextScreen(300, 178, ss.str().c_str());
 	Broodwar->drawTextScreen(300, 108, ss.str().c_str());
-	Broodwar->drawLineScreen(300, 230, 480, 230, Colors::Orange);
+	Broodwar->drawLineScreen(300, 200, 440, 200, Colors::Orange);
 }
 
 int Commander::addBunkerSquad()

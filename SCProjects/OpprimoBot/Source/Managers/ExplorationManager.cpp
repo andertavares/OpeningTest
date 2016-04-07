@@ -143,13 +143,14 @@ void ExplorationManager::printInfo() {
 	//Uncomment this if you want to draw a mark at detected enemy buildings.
 	for (auto enemyBldg : enemyBuildings) {
 		//if (enemyBldg-> isActive()){
-			int x1 = enemyBldg->getTilePosition().x * 32;
-			int y1 = enemyBldg->getTilePosition().y * 32;
-			int x2 = x1 + enemyBldg->getType().dimensionRight() * 2;
-			int y2 = y1 + enemyBldg->getType().dimensionDown() * 2;
+
+		int x1 = enemyBldg->getTilePosition().x * 32;
+		int y1 = enemyBldg->getTilePosition().y * 32;
+		int x2 = x1 + enemyBldg->getType().dimensionLeft() + enemyBldg->getType().dimensionRight();
+		int y2 = y1 + enemyBldg->getType().dimensionUp() + enemyBldg->getType().dimensionDown();
 			
-			Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Red, false);
-			Broodwar->drawTextMap(x1, x2, enemyBldg->getType().c_str());
+		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Red, false);
+		Broodwar->drawTextMap(x1 + enemyBldg->getType().dimensionRight(), y1 + enemyBldg->getType().dimensionDown(), enemyBldg->getType().c_str());
 		//}
 	}
 
@@ -161,7 +162,7 @@ void ExplorationManager::printInfo() {
 		int y2 = y1 + enemyUnit->getType().dimensionDown() * 2;
 
 		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Orange, false);
-		Broodwar->drawTextMap(x1, x2, enemyUnit->getType().c_str());
+		Broodwar->drawTextMap(x1 + enemyUnit->getType().dimensionRight(), y1 + enemyUnit->getType().dimensionDown(), enemyUnit->getType().c_str());
 		//}
 	}
 

@@ -19,8 +19,8 @@ private:
 	Squad* secondarySquad;
 	Squad* backupSquad1;
 	Squad* backupSquad2;
-	Squad* sc1;
-	Squad* sc2;
+	Squad* scout1;
+	Squad* scout2;
 
 	/** time (seconds) since last evaluation */
 	int lastTimeChecked;

@@ -11,7 +11,7 @@ TechManager* TechManager::instance = NULL;
 
 TechManager::TechManager() : buildPlan(Commander::getInstance()->getBuildPlan()) {
 	lastCallFrame = 0;
-	debug = false;
+	debug = true;
 	agentManager = AgentManager::getInstance();
 	//buildPlan = Commander::getInstance()->getBuildPlan();
 }
@@ -29,10 +29,12 @@ TechManager* TechManager::getInstance(){
 
 void TechManager::toggleDebug(){
 	debug = !debug;
-	Broodwar->printf("TechManager debug set to %s", debug);
+	//Broodwar->printf("TechManager debug set to %s", debug);
 }
 
 void TechManager::printInfo(){
+	if (!debug) return;
+
 	Broodwar->drawBoxScreen(488, 90, 602, 200, Colors::Black, true);
 	Broodwar->drawTextScreen(490, 90, "\x03Tech Tree");
 	Broodwar->drawLineScreen(490, 106, 600, 106, Colors::Orange);

@@ -3,6 +3,9 @@
 #include "../../Evaluators/MilitaryEvaluator.h"
 #include "../../Managers/BuildplanEntry.h"
 #include "../../Managers/AgentManager.h"
+#include "../../Managers/TechManager.h"
+#include "../../Managers/Upgrader.h"
+#include "../../Managers/Constructor.h"
 #include "../ExplorationSquad.h"
 #include "../RushSquad.h"
 
@@ -33,12 +36,12 @@ TerranMain::TerranMain()
 	secondarySquad->setBuildup(true);
 	squads.push_back(secondarySquad);
 
-	sc1 = new RushSquad(10, "ScoutingSquad1", 11);
-	sc1->setRequired(false);
+	scout1 = new RushSquad(10, "ScoutingSquad1", 11);
+	scout1->setRequired(false);
 	
-	sc2 = new ExplorationSquad(11, "ScoutingSquad2", 11);
-	sc2->setRequired(false);
-	squads.push_back(sc2);
+	scout2 = new ExplorationSquad(11, "ScoutingSquad2", 11);
+	scout2->setRequired(false);
+	squads.push_back(scout2);
 
 	backupSquad1 = new Squad(5, Squad::OFFENSIVE, "BackupSquad1", 11);
 	backupSquad1->setRequired(false);
@@ -74,6 +77,24 @@ void TerranMain::computeActions()
 	int minerals = Broodwar->self()->minerals();
 	int gas = Broodwar->self()->gas();
 
+	//select a worker to scout: between 1 and 10 minutes of game, with 9 supply, if nobody else is scouting
+	if (scout2->getMembers().size() == 0 && Broodwar->elapsedTime() > 60 && Broodwar->elapsedTime() < 600 && cSupply == 8){
+		BaseAgent* freeWorker = AgentManager::getInstance()->findClosestFreeWorker(Broodwar->self()->getStartLocation());
+		if (freeWorker != NULL) {
+			scout2->addSetup(UnitTypes::Terran_SCV, 1);
+			scout2->addMember(freeWorker);
+			scout2->setPriority(1);
+			scout2->setActivePriority(1000);
+			scout2->forceActive();
+			//scout1->
+			squads.push_back(scout2);
+		}
+		else {
+			Broodwar->printf("ERROR: couldn't find free worker to scout.");
+		}
+	}
+
+
 	if (cSupply >= 20 && stage == 0)
 	{
 		mainSquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
@@ -99,10 +120,10 @@ void TerranMain::computeActions()
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, cSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, cSupply));
 
-		sc1->addSetup(UnitTypes::Terran_Vulture, 1);
-		sc1->setPriority(1);
-		sc1->setActivePriority(1000);
-		squads.push_back(sc1);
+		scout1->addSetup(UnitTypes::Terran_Vulture, 1);
+		scout1->setPriority(1);
+		scout1->setActivePriority(1000);
+		squads.push_back(scout1);
 
 		secondarySquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 2);
 		secondarySquad->addSetup(UnitTypes::Terran_Marine, 8);
@@ -115,8 +136,8 @@ void TerranMain::computeActions()
 	{
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, cSupply));
 
-		sc2->addSetup(UnitTypes::Terran_Vulture, 2);
-		sc2->setBuildup(false);
+		scout2->addSetup(UnitTypes::Terran_Vulture, 2);
+		scout2->setBuildup(false);
 
 		stage++;
 	}
@@ -159,27 +180,30 @@ void TerranMain::computeActions()
 		
 		stage++;
 	}
-	else {
+	//else {
 		//situation does not fit any previous conditions, will take some default actions
-		defaultAction();
-	}
+	
+	defaultAction();
+	//}
 
 }
 
 void TerranMain::defaultAction(){
 	if (buildplan.size() > 0) return;	//skips doing anything if buildplan is not satisfied
-	if (Broodwar->elapsedTime() - lastTimeChecked < 30) return;	//check every 30 seconds
+	if (Broodwar->elapsedTime() - lastTimeChecked < 5) return;	//check every 5 seconds
+	
+	lastTimeChecked = Broodwar->elapsedTime();
 
-
+	Broodwar->printf("Default action...");
 	EconomyStrength economyStrength = EconomyEvaluator::getInstance()->evaluateEconomy();
 	int currentSupply = Broodwar->self()->supplyUsed() / 2;
 
 	int numberSCVs = AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_SCV);
-	int numberCCs = 0;
-	Unitset myUnits = Broodwar->self()->getUnits();
+	int numberCCs = AgentManager::getInstance()->countNoBases();
+	/*Unitset myUnits = Broodwar->self()->getUnits();
 	for (auto a : myUnits){
 		if (a->getType() == UnitTypes::Terran_Command_Center)  numberCCs++;
-	}
+	}*/
 	/*if (numberSCVs < 60 && numberSCVs / numberCCs < 15){	//we want at least 15 SCVs per base at the limit of 60
 		mainSquad->addSetup(UnitTypes::Terran_SCV, 1);
 
@@ -209,7 +233,7 @@ void TerranMain::defaultAction(){
 		enhanceMilitary();
 	}
 
-	lastTimeChecked = Broodwar->elapsedTime();
+	
 }
 
 void TerranMain::enhanceMilitary(){
@@ -229,6 +253,7 @@ void TerranMain::enhanceMilitary(){
 
 	if (enemyLand == HEAVY_MANY || enemyLand == HEAVY_FEW || enemyLand == MIXED_MANY) {	//respond with tanks
 		//techUpTo(Tank)
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Siege_Tank_Siege_Mode);
 		backupSquad1->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 8);
 		secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
 		secondarySquad->addSetup(UnitTypes::Terran_Medic, 3);
@@ -236,7 +261,8 @@ void TerranMain::enhanceMilitary(){
 	}
 
 	if (enemyLand == LIGHT_MANY || enemyLand == LIGHT_FEW || enemyLand == MIXED_FEW) {	//respond with infantry
-		//techUpTo(Firebat, Medic)
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Firebat);
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Medic);
 		secondarySquad->addSetup(UnitTypes::Terran_Vulture, 8);
 		//secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
 		secondarySquad->addSetup(UnitTypes::Terran_Medic, 1);
@@ -244,8 +270,9 @@ void TerranMain::enhanceMilitary(){
 		Broodwar->printf("Responding to LIGHT enemy LAND.");
 	}
 
-	if (enemyAir == HEAVY_MANY || enemyAir == HEAVY_FEW || enemyAir == MIXED_MANY) {	//respond with tanks
-		//techUpTo(Goliath, Wraith)
+	if (enemyAir == HEAVY_MANY || enemyAir == HEAVY_FEW || enemyAir == MIXED_MANY) {	//respond with anti-air
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Goliath);
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Wraith);
 		backupSquad1->addSetup(UnitTypes::Terran_Goliath, 8);
 		backupSquad1->addSetup(UnitTypes::Terran_Wraith, 8);
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
@@ -253,8 +280,8 @@ void TerranMain::enhanceMilitary(){
 		Broodwar->printf("Responding to HEAVY enemy AIR.");
 	}
 
-	if (enemyAir == LIGHT_MANY || enemyAir == LIGHT_FEW || enemyAir == MIXED_FEW) {	//respond with infantry
-		//techUpTo(Firebat, Medic)
+	if (enemyAir == LIGHT_MANY || enemyAir == LIGHT_FEW || enemyAir == MIXED_FEW) {	//respond with anti-air
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Firebat);
 		backupSquad1->addSetup(UnitTypes::Terran_Goliath, 4);
 		backupSquad1->addSetup(UnitTypes::Terran_Wraith, 4);
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
@@ -281,16 +308,80 @@ void TerranMain::enhanceMilitary(){
 		secondarySquad->addSetup(UnitTypes::Terran_Vulture, 2);
 	}
 
-	int desiredNumBunkers = 2 * agentManager->countNoBases();
+	/*int desiredNumBunkers = agentManager->countNoBases();
 	if (numBunkers < desiredNumBunkers) {
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, currentSupply));
-	}
+	}*/
 
 	//TODO: count number of buildings that produce military and decide whether to produce more
 }
 
 void TerranMain::techUp(){
-	Broodwar->printf("I don't know how to tech up yet :(");
+	//tests if we have barracks or it is in build order
+	if (!AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Barracks) && !Constructor::getInstance()->containsType(UnitTypes::Terran_Barracks)){
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Barracks);
+		return;
+	}
+
+
+	//basic stuff: academy, engineering bay
+	if (!AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Academy) && !Constructor::getInstance()->containsType(UnitTypes::Terran_Academy)){
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Academy);
+	}
+	if (!AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Engineering_Bay) && !Constructor::getInstance()->containsType(UnitTypes::Terran_Engineering_Bay)){
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Engineering_Bay);
+	}
+
+
+
+	//if enemy is going airborne, we'd better research goliath range // wraith 
+	MilitaryForce enemyAir = MilitaryEvaluator::getInstance()->evaluateEnemyAir();
+	if (enemyAir == MIXED_FEW || enemyAir == MIXED_MANY || enemyAir == LIGHT_MANY || enemyAir == HEAVY_FEW || enemyAir == HEAVY_MANY){
+
+		//check for goliath pre-reqs
+		if (TechManager::getInstance()->preRequisitesSatisfiedFor(UnitTypes::Terran_Goliath)){
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Charon_Boosters);
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Terran_Vehicle_Weapons);
+		}
+		else {
+			TechManager::getInstance()->techUpTo(UnitTypes::Terran_Goliath);
+		}
+
+		//check for wraith pre-reqs
+		if (TechManager::getInstance()->preRequisitesSatisfiedFor(UnitTypes::Terran_Wraith)){
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Terran_Ship_Weapons);
+		}
+		else {
+			TechManager::getInstance()->techUpTo(UnitTypes::Terran_Wraith);
+		}
+	}
+
+	//if enemy is going land, we'd better research tank stuff // infantry
+	MilitaryForce enemyLand = MilitaryEvaluator::getInstance()->evaluateEnemyLand();
+	if (enemyLand == HEAVY_FEW || enemyLand == HEAVY_MANY || enemyLand == MIXED_FEW || enemyLand == MIXED_MANY) {
+		//respond with heavy land
+		//check for tank pre-reqs
+		if (TechManager::getInstance()->preRequisitesSatisfiedFor(UnitTypes::Terran_Siege_Tank_Siege_Mode)){
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Terran_Vehicle_Weapons);
+		}
+		else {
+			TechManager::getInstance()->techUpTo(UnitTypes::Terran_Siege_Tank_Siege_Mode);	//TODO: check if Siege Mode is being researched
+		}
+
+	}
+	if (enemyLand == MIXED_FEW || enemyLand == MIXED_MANY || enemyLand == LIGHT_FEW || enemyLand == LIGHT_MANY) {
+		//respond with infantry
+
+		//check for Firebat/Medic
+		if (TechManager::getInstance()->preRequisitesSatisfiedFor(UnitTypes::Terran_Medic)){
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Caduceus_Reactor);
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Terran_Infantry_Weapons);
+		}
+		else {
+			TechManager::getInstance()->techUpTo(UnitTypes::Terran_Medic);	
+		}
+	}
+
 }
 
 void TerranMain::doUpgrades(){

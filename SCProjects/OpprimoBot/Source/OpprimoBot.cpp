@@ -224,10 +224,9 @@ void OpprimoBot::onSendText(std::string text)
 	}
 	else if (text == "t") {
 		Upgrader::getInstance()->toggleDebug();
-	}
-	else if (text == "td") {
 		TechManager::getInstance()->toggleDebug();
 	}
+	
 	else if (text == "s")
 	{
 		Commander::getInstance()->toggleSquadsDebug();
