@@ -87,7 +87,11 @@ public:
 
 	/** Adds a setup for this Squad. Setup is a type and amount of units
 	 * that shall be in this Squad. */
-	void addSetup(UnitType type, int no);
+	Squad* addSetup(UnitType type, int number);
+
+	/** Sets the number of a given unit type for this Squad. Will try to train 
+	 * units up to the given number */
+	Squad* setSetup(UnitType type, int number);
 
 	/** Removes a setup for this squad. */
 	void removeSetup(UnitType type, int no);

@@ -149,6 +149,7 @@
     <ClCompile Include="Source\UnitAgents\Zerg\LurkerAgent.cpp" />
     <ClCompile Include="Source\UnitAgents\Zerg\MutaliskAgent.cpp" />
     <ClCompile Include="Source\UnitAgents\Zerg\QueenAgent.cpp" />
+    <ClCompile Include="Source\Utils\ColorString.cpp" />
     <ClCompile Include="Source\Utils\Config.cpp" />
     <ClCompile Include="Source\Utils\cthread.cpp" />
     <ClCompile Include="Source\Utils\FileReaderUtils.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Source\UnitAgents\Zerg\LurkerAgent.h" />
     <ClInclude Include="Source\UnitAgents\Zerg\MutaliskAgent.h" />
     <ClInclude Include="Source\UnitAgents\Zerg\QueenAgent.h" />
+    <ClInclude Include="Source\Utils\ColorString.h" />
     <ClInclude Include="Source\Utils\Config.h" />
     <ClInclude Include="Source\Utils\cthread.h" />
     <ClInclude Include="Source\Utils\FileReaderUtils.h" />

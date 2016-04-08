@@ -44,13 +44,13 @@ bool GhostAgent::useAbilities()
 
 Unit GhostAgent::findLockdownTarget()
 {
-	int fCnt = friendlyUnitsWithinRange(224);
+	/*int fCnt = friendlyUnitsWithinRange(224);
 	if (fCnt < 2)
 	{
 		//If we dont have any attacking units nearby,
 		//dont bother with lockdown.
 		return NULL;
-	}
+	}*/
 
 	int maxRange = TechTypes::Lockdown.getWeapon().maxRange();
 

@@ -27,7 +27,8 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyAir(){
 	
 	numHeavyUnits = enemyUnits.countUnitsOfType(UnitTypes::Terran_Battlecruiser)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Carrier)
-		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Guardian);
+		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Guardian)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Arbiter);
 
 	numLightUnits = enemyUnits.countUnitsOfType(UnitTypes::Zerg_Mutalisk)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Wraith)
@@ -55,10 +56,51 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyAir(){
 	return NONE;
 }
 
+MilitaryForce MilitaryEvaluator::evaluateEnemyMech(){
+	int numHeavyUnits = 0;	//accounts for Battlecruisers, Carriers, Guardians
+	int numLightUnits = 0;	//accounts for Mutalisks, Wraiths, Scouts
+	SpottedObjectSet& enemyUnits = explorationManager->getSpottedUnits();
+
+	numHeavyUnits = enemyUnits.countUnitsOfType(UnitTypes::Terran_Battlecruiser)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Siege_Tank_Siege_Mode)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Siege_Tank_Tank_Mode)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Carrier)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Reaver)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Arbiter);
+
+	numLightUnits = enemyUnits.countUnitsOfType(UnitTypes::Terran_Vulture)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Science_Vessel)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Wraith)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Goliath)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Scout)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Corsair);
+
+	if (numLightUnits > 0 || numHeavyUnits > 0) {	//enemy has some air force, won't return NONE
+
+		//won't bother returning MIXED_MANY because HEAVY_MANY is already troublesome
+		if (numHeavyUnits > 5) {
+			return HEAVY_MANY;
+		}
+		else if (numLightUnits > 10 && numHeavyUnits < 3){
+			return LIGHT_MANY;
+		}
+		else if (numLightUnits < 10 && numHeavyUnits < 3){
+			return LIGHT_FEW;
+		}
+		else if (numLightUnits > 0 && numHeavyUnits > 0){
+			return MIXED_FEW;
+		}
+		else return HEAVY_FEW;
+	}
+
+	return NONE;
+}
+
 MilitaryForce MilitaryEvaluator::evaluateEnemyLand(){
 	int numHeavyUnits = 0;	//accounts for Infantry, Lings, Hydras, Zealots, Goons, High Templars, DTs
-	int numLightUnits = 0;	//accounts for Tanks, Ultralisks, Reavers, Archon
+	int numLightUnits = 0;	//accounts for Tanks, Ultralisks, Reavers, Archon, defensive buildings
 	SpottedObjectSet& enemyUnits = explorationManager->getSpottedUnits();
+	SpottedObjectSet& enemyBldgs = explorationManager->getSpottedBuildings();
 
 	numLightUnits = enemyUnits.countUnitsOfType(UnitTypes::Terran_Marine)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Firebat)
@@ -76,7 +118,10 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyLand(){
 		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Siege_Tank_Tank_Mode)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Ultralisk)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Reaver)
-		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Archon);
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Archon)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Sunken_Colony)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Photon_Cannon)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Bunker);
 
 	if (numLightUnits > 0 || numHeavyUnits > 0) {	//enemy has some land force, won't return NONE
 

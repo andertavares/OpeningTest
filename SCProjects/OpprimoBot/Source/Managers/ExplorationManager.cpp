@@ -75,6 +75,21 @@ SpottedObjectSet& ExplorationManager::getSpottedUnits(){
 	return enemyUnits;
 }
 
+bool ExplorationManager::hasEnemyAround(TilePosition tilePos, int tileRadius){
+	for (auto a : enemyBuildings){
+		if (a->getTilePosition().getDistance(tilePos) < tileRadius){
+			return true;
+		}
+	}
+
+	for (auto a : enemyUnits){
+		if (a->getTilePosition().getDistance(tilePos) < tileRadius){
+			return true;
+		}
+	}
+	return false;
+}
+
 TilePosition ExplorationManager::searchExpansionSite()
 {
 	getExpansionSite();

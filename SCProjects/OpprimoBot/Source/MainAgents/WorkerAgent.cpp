@@ -3,6 +3,7 @@
 #include "../Pathfinding/NavigationAgent.h"
 #include "../Managers/BuildingPlacer.h"
 #include "../Managers/Constructor.h"
+#include "../Managers/ExplorationManager.h"
 #include "../Commander/Commander.h"
 #include "../Managers/ResourceManager.h"
 
@@ -190,6 +191,30 @@ bool WorkerAgent::isFreeWorker()
 	return true;
 }
 
+/** Finds the closes mineral field without enemy presence */
+Unit WorkerAgent::findClosestFreeMineral(){
+	//attemps to find a mineral close to a base
+	Unit mineral = BuildingPlacer::getInstance()->findClosestMineral(unit->getTilePosition());
+	if (mineral != NULL) {
+		return mineral;
+	}
+	else {	//no mineral close to a base, will try to find one far from base
+		double bestDist = 100000;
+		Unit bestMineral = NULL;
+		for (auto &mineral : Broodwar->getMinerals()) {
+			if (mineral->exists() && mineral->getResources() > 0) {
+
+				double dist = getUnit()->getTilePosition().getDistance(mineral->getTilePosition());
+				if (dist <= bestDist && !ExplorationManager::getInstance()->hasEnemyAround(mineral->getTilePosition(), 10) ) {
+					bestMineral = mineral;
+					bestDist = dist;
+				}
+			}
+		}
+		return bestMineral;
+	}
+}
+
 
 void WorkerAgent::computeActions()
 {
@@ -255,10 +280,12 @@ void WorkerAgent::computeActions()
 	{
 		if (unit->isIdle())
 		{
-			Unit mineral = BuildingPlacer::getInstance()->findClosestMineral(unit->getTilePosition());
-			if (mineral != NULL)
-			{
+			Unit mineral = findClosestFreeMineral(); // BuildingPlacer::getInstance()->findClosestMineral(unit->getTilePosition());
+			if (mineral != NULL) {
 				unit->rightClick(mineral);
+			}
+			else {	//no mineral close to a base, will have to travel far away to get some
+				Broodwar->printf("WARNING: could not find a mineral to mine");
 			}
 		}
 	}

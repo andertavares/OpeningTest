@@ -259,6 +259,7 @@ void TerranMain::enhanceMilitary(){
 
 	MilitaryForce enemyLand = MilitaryEvaluator::getInstance()->evaluateEnemyLand();
 	MilitaryForce enemyAir = MilitaryEvaluator::getInstance()->evaluateEnemyAir();
+	MilitaryForce enemyMech = MilitaryEvaluator::getInstance()->evaluateEnemyMech();
 
 	EconomyStrength economy = EconomyEvaluator::getInstance()->evaluateEconomy();
 
@@ -274,17 +275,19 @@ void TerranMain::enhanceMilitary(){
 			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
 			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
 		}
+		
 
 		Broodwar->printf("Responding to HEAVY enemy LAND.");
 	}
 
-	if (enemyLand == LIGHT_MANY || enemyLand == LIGHT_FEW || enemyLand == MIXED_FEW) {	//respond with infantry
+	if (enemyLand == LIGHT_MANY || enemyLand == LIGHT_FEW ||  enemyLand == MIXED_FEW) {	//respond with infantry
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Firebat);
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Medic);
-		mainSquad->addSetup(UnitTypes::Terran_Vulture, 8);
+		mainSquad->addSetup(UnitTypes::Terran_Vulture, 6);
 		//secondarySquad->addSetup(UnitTypes::Terran_Marine, 10);
 		mainSquad->addSetup(UnitTypes::Terran_Medic, 1);
 		mainSquad->addSetup(UnitTypes::Terran_Firebat, 3);	//TODO: check if Firebat is being micro'ed
+		mainSquad->addSetup(UnitTypes::Terran_Marine, 6);
 		
 		if (economy == STRONG || economy == ABUNDANT){
 			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
@@ -324,8 +327,22 @@ void TerranMain::enhanceMilitary(){
 		Broodwar->printf("Responding to LIGHT enemy AIR.");
 	}
 
+	//responds to enemy mech
+	if (enemyMech == HEAVY_MANY || enemyMech == LIGHT_MANY || enemyMech == MIXED_MANY) {
+		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Ghost);
+		TechManager::getInstance()->techUpTo(TechTypes::Lockdown);
+		TechManager::getInstance()->techUpTo(TechTypes::Personnel_Cloaking);
+		
+		
+		mainSquad->setSetup(UnitTypes::Terran_Ghost, 12);
+		//mainSquad->addSetup(UnitTypes::Terran_Medic, 3);
+		
+		Broodwar->printf("Responding to HEAVY enemy MECH.");
+	}
+
 	if (numberTanks < 12){
 		mainSquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
+		Broodwar->printf("Adding tanks to army");
 	}
 
 	if (unloadedMarines < 40){
@@ -333,7 +350,7 @@ void TerranMain::enhanceMilitary(){
 	}
 
 	if (numberMedics < unloadedMarines / 3){
-		mainSquad->addSetup(UnitTypes::Terran_Medic, 3);
+		mainSquad->setSetup(UnitTypes::Terran_Medic, unloadedMarines / 3);
 	}
 
 	if (numberGoliaths < 8){

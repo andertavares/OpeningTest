@@ -41,7 +41,7 @@ void TechManager::printInfo(){
 
 	stringstream ss;
 	for (auto a : unitJobs)	{
-		ss << a.first.c_str() << "|" << a.second << endl;
+		ss << a.first.c_str() << " - " << stringOf(a.second) << endl;
 	}
 	Broodwar->drawTextScreen(490, 106, ss.str().c_str());
 }
@@ -53,6 +53,7 @@ void TechManager::computeActions(){
 
 	for (auto target : unitJobs)	{	
 		if (preRequisitesSatisfiedFor(target.first)){
+			Broodwar->printf("Pre-reqs sat'ed for %s", target.first.c_str());
 			unitJobs.emplace(target.first, ACCOMPLISHED);
 			break;
 		}
@@ -94,8 +95,14 @@ bool TechManager::inBuildPlan(UnitType type){
 
 bool TechManager::preRequisitesSatisfiedFor(UnitType type){
 	
+	//if i have that unit type, pre requisites are satisfied
+	if (AgentManager::getInstance()->countNoFinishedUnits(type) > 0){
+		return true;
+	}
+
 	//checks whether necessary Tech was researched
-	if (!Broodwar->self()->hasResearched(type.requiredTech())){
+	TechType requiredTech = type.requiredTech();
+	if (requiredTech != TechTypes::None &&  !Broodwar->self()->hasResearched(requiredTech)){
 		return false;
 	}
 
@@ -134,7 +141,8 @@ bool TechManager::preRequisitesSatisfiedFor(UpgradeType type, int level){
 	}
 
 	//check additional requirements
-	if (AgentManager::getInstance()->countNoFinishedUnits(type.whatsRequired()) == 0){
+	UnitType additionalReq = type.whatsRequired();
+	if (additionalReq != UnitTypes::None && AgentManager::getInstance()->countNoFinishedUnits(additionalReq) == 0){
 		return false;
 	}
 
@@ -143,16 +151,30 @@ bool TechManager::preRequisitesSatisfiedFor(UpgradeType type, int level){
 
 /** Advances the technology tree to be able to build a given unit */
 void TechManager::techUpTo(UnitType type){
-	unitJobs.emplace(type, NOT_STARTED);
+	if (!preRequisitesSatisfiedFor(type)) {
+		unitJobs.emplace(type, NOT_STARTED);
+	}
 }
 
 /** Advances the technology tree to be able to research a given tech */
 void TechManager::techUpTo(TechType type){
-	techJobs.emplace(type, NOT_STARTED);
+	if (!preRequisitesSatisfiedFor(type)) {
+		techJobs.emplace(type, NOT_STARTED);
+	}
 }
 
 /** Advances the technology tree to be able to research a given upgrade in a given level */
 void TechManager::techUpTo(UpgradeType type, int level){
-	pair<UpgradeType, int> *job = new pair<UpgradeType, int>(type, level);
-	upgradeJobs.emplace(make_pair(type, level), NOT_STARTED);
+	if (!preRequisitesSatisfiedFor(type, level)) {
+		pair<UpgradeType, int> *job = new pair<UpgradeType, int>(type, level);
+		upgradeJobs.emplace(make_pair(type, level), NOT_STARTED);
+	}
+}
+
+string TechManager::stringOf(Status status){
+	if (status == NOT_STARTED) return "Not started";
+	if (status == IN_PROGRESS) return "In progress";
+	if (status == ACCOMPLISHED) return "Accomplished";
+
+	return "";
 }

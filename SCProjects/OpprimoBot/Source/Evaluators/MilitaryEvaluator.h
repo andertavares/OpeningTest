@@ -37,6 +37,9 @@ public:
 	/** Returns whether prevalent combat units are light, heavy, mixed (or none) */
 	MilitaryForce evaluateEnemyLand();
 
+	/** Returns an evaluation of enemy mechanic units */
+	MilitaryForce evaluateEnemyMech();
+
 	/** Returns an evaluation of our military forces */
 	MilitaryForce evaluateOurForces();
 

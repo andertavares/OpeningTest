@@ -77,6 +77,9 @@ public:
 	/** Advances the technology tree to be able to research a given upgrade in a given level */
 	void techUpTo(UpgradeType type, int level);
 
+	/** Returns a string representation of the status of a Tech job */
+	static string stringOf(Status status);
+
 
 };
 

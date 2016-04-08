@@ -126,10 +126,11 @@ int Squad::maxSize()
 	return no;
 }
 
-void Squad::addSetup(UnitType type, int no)
-{
+Squad* Squad::addSetup(UnitType type, int number) {
+	setSetup(type, countMembersOfType(type) + number);
+	return this;
 	//First, check if we have the setup already
-	for (int i = 0; i < (int)setup.size(); i++)
+	/*for (int i = 0; i < (int)setup.size(); i++)
 	{
 		if (setup.at(i).type.getID() == type.getID())
 		{
@@ -149,7 +150,30 @@ void Squad::addSetup(UnitType type, int no)
 	if (!type.isFlyer())
 	{
 		moveType = GROUND;
+	}*/
+}
+
+Squad* Squad::setSetup(UnitType type, int number){
+	//First, check if we have the setup already
+	for (int i = 0; i < (int)setup.size(); i++)	{
+		if (setup.at(i).type.getID() == type.getID())	{
+			//Found, set the amount
+			setup.at(i).no = number;
+			return this;
+		}
 	}
+
+	//Not found, add as new
+	UnitSetup us;
+	us.type = type;
+	us.no = number;
+	us.current = 0;
+	setup.push_back(us);
+
+	if (!type.isFlyer()) {
+		moveType = GROUND;
+	}
+	return this;
 }
 
 void Squad::removeSetup(UnitType type, int no)

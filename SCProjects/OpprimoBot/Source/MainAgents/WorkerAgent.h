@@ -26,6 +26,9 @@ private:
 	bool checkRepair();
 	void computeSquadWorkerActions();
 
+	/** Finds the closes mineral field without enemy presence */
+	Unit findClosestFreeMineral();
+
 	int lastFrame;
 
 public:

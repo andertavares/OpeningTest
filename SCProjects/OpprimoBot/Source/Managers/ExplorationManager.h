@@ -76,6 +76,9 @@ public:
 	/** Return spotted enemy buildings (excluding units) */
 	SpottedObjectSet& getSpottedBuildings();
 
+	/** Returns whether an enemy has been spotted in a radius around a point */
+	bool hasEnemyAround(TilePosition tilePos, int tileRadius);
+
 	/** Returns the next position to explore for this squad. */
 	TilePosition getNextToExplore(Squad* squad);
 

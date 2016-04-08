@@ -190,6 +190,9 @@
     <ClCompile Include="Source\Managers\TechManager.cpp">
       <Filter>Managers</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utils\ColorString.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -382,6 +385,9 @@
     </ClInclude>
     <ClInclude Include="Source\Managers\TechManager.h">
       <Filter>Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\ColorString.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
