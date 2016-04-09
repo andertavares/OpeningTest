@@ -36,8 +36,25 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyAir(){
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Corsair);
 
 	if (numLightUnits > 0 || numHeavyUnits > 0) {	//enemy has some air force, won't return NONE
-
-		//won't bother returning MIXED_MANY because HEAVY_MANY is already troublesome
+		if (numHeavyUnits > 5 && numLightUnits > 10) {
+			return MIXED_MANY;
+		}
+		else if (numHeavyUnits < 5 && numLightUnits < 10){
+			return MIXED_FEW;
+		}
+		else if (numHeavyUnits > 5 && numLightUnits < 10){
+			return HEAVY_MANY;
+		}
+		else if (numHeavyUnits < 5 && numLightUnits < 3){
+			return HEAVY_FEW;
+		}
+		else if (numHeavyUnits < 5 && numLightUnits > 10){
+			return LIGHT_MANY;
+		}
+		else if (numHeavyUnits < 2 && numLightUnits < 10){
+			return LIGHT_FEW;
+		}
+		/*//won't bother returning MIXED_MANY because HEAVY_MANY is already troublesome
 		if (numHeavyUnits > 5) {
 			return HEAVY_MANY;
 		}
@@ -50,7 +67,7 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyAir(){
 		else if (numLightUnits > 0 && numHeavyUnits > 0){
 			return MIXED_FEW;
 		}
-		else return HEAVY_FEW;
+		else return HEAVY_FEW;*/
 	}
 
 	return NONE;
@@ -125,10 +142,26 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyLand(){
 
 	if (numLightUnits > 0 || numHeavyUnits > 0) {	//enemy has some land force, won't return NONE
 
-		//won't bother returning MIXED_MANY because HEAVY_MANY is already troublesome
-		if (numHeavyUnits > 5) {
+		if (numHeavyUnits > 5 && numLightUnits > 10) {
+			return MIXED_MANY;
+		}
+		else if (numHeavyUnits < 5 && numLightUnits < 10){
+			return MIXED_FEW;
+		}
+		else if (numHeavyUnits > 5 && numLightUnits < 10){
 			return HEAVY_MANY;
 		}
+		else if (numHeavyUnits < 5 && numLightUnits < 3){
+			return HEAVY_FEW;
+		}
+		else if (numHeavyUnits < 5 && numLightUnits > 10){
+			return LIGHT_MANY;
+		}
+		else if (numHeavyUnits < 2 && numLightUnits < 10){
+			return LIGHT_FEW;
+		}
+
+		/*
 		else if (numLightUnits > 10 && numHeavyUnits < 3){
 			return LIGHT_MANY;
 		}
@@ -139,6 +172,7 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyLand(){
 			return MIXED_FEW;
 		}
 		else return HEAVY_FEW;
+		*/
 	}
 
 	return NONE;

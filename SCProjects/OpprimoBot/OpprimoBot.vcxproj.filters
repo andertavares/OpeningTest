@@ -193,6 +193,9 @@
     <ClCompile Include="Source\Utils\ColorString.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utils\UnitString.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -387,6 +390,9 @@
       <Filter>Managers</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\ColorString.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\UnitString.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

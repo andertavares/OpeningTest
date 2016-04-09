@@ -1,5 +1,6 @@
 #include "ExplorationManager.h"
 #include "BuildingPlacer.h"
+#include "../Utils/UnitString.h"
 
 ExplorationManager* ExplorationManager::instance = NULL;
 
@@ -165,7 +166,7 @@ void ExplorationManager::printInfo() {
 		int y2 = y1 + enemyBldg->getType().dimensionUp() + enemyBldg->getType().dimensionDown();
 			
 		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Red, false);
-		Broodwar->drawTextMap(x1 + enemyBldg->getType().dimensionRight(), y1 + enemyBldg->getType().dimensionDown(), enemyBldg->getType().c_str());
+		Broodwar->drawTextMap(x1 + enemyBldg->getType().dimensionRight(), y1 + enemyBldg->getType().dimensionDown(), UnitString::shortName(enemyBldg->getType()).c_str());
 		//}
 	}
 
@@ -177,7 +178,7 @@ void ExplorationManager::printInfo() {
 		int y2 = y1 + enemyUnit->getType().dimensionDown() * 2;
 
 		Broodwar->drawBoxMap(x1, y1, x2, y2, Colors::Orange, false);
-		Broodwar->drawTextMap(x1 + enemyUnit->getType().dimensionRight(), y1 + enemyUnit->getType().dimensionDown(), enemyUnit->getType().c_str());
+		Broodwar->drawTextMap(x1 + enemyUnit->getType().dimensionRight(), y1 + enemyUnit->getType().dimensionDown(), UnitString::shortName(enemyUnit->getType()).c_str());
 		//}
 	}
 

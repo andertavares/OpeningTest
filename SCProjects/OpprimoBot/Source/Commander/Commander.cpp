@@ -168,23 +168,28 @@ void Commander::computeActionsBase()
 	//Check if we shall go back to defend
 	if (currentState == ATTACK)
 	{
-		bool activeFound = false;
-		for (Squad* s : squads)
-		{
-			if (s->isRequired() && s->isActive())
-			{
-				activeFound = true;
+		bool shouldKeepAttacking = false;
+		for (Squad* s : squads) {
+			if (s->isRequired() && s->isActive()) {
+				shouldKeepAttacking = true;
+			}
+		}
+
+		//second check: evaluate our forces, if low on military, refrain from attacking
+		if (shouldKeepAttacking) {
+			MilitaryForce ourForces = MilitaryEvaluator::getInstance()->evaluateOurForces();
+
+			if (ourForces == HEAVY_FEW || ourForces == LIGHT_FEW || ourForces == MIXED_FEW) {
+				shouldKeepAttacking = false;
 			}
 		}
 
 		//No active required squads found.
 		//Go back to defend.
-		if (!activeFound)
-		{
+		if (!shouldKeepAttacking) {
 			currentState = DEFEND;
 			TilePosition defSpot = findChokePoint();
-			for (Squad* s : squads)
-			{
+			for (Squad* s : squads) {
 				s->setGoal(defSpot);
 			}
 		}
