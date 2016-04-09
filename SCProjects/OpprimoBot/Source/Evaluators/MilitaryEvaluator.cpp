@@ -92,7 +92,7 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyMech(){
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Scout)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Corsair);
 
-	if (numLightUnits > 0 || numHeavyUnits > 0) {	//enemy has some air force, won't return NONE
+	if (numLightUnits > 0 || numHeavyUnits > 0) {	//enemy has some mech, won't return NONE
 
 		//won't bother returning MIXED_MANY because HEAVY_MANY is already troublesome
 		if (numHeavyUnits > 5) {
@@ -193,9 +193,9 @@ MilitaryForce MilitaryEvaluator::evaluateOurForces(){
 		+ agentManager->countNoFinishedUnits(UnitTypes::Zerg_Guardian);;
 
 	//accounts for light land and air units
-	int numLightUnits = agentManager->countNoFinishedUnits(UnitTypes::Terran_Marine)
-		+ agentManager->countNoFinishedUnits(UnitTypes::Terran_Firebat)
-		+ agentManager->countNoFinishedUnits(UnitTypes::Terran_Ghost)
+	int numLightUnits = agentManager->countUnloadedUnits(UnitTypes::Terran_Marine)
+		+ agentManager->countUnloadedUnits(UnitTypes::Terran_Firebat)
+		+ agentManager->countUnloadedUnits(UnitTypes::Terran_Ghost)
 		+ agentManager->countNoFinishedUnits(UnitTypes::Terran_Goliath)
 		+ agentManager->countNoFinishedUnits(UnitTypes::Terran_Vulture)
 		+ agentManager->countNoFinishedUnits(UnitTypes::Zerg_Zergling)
@@ -212,9 +212,28 @@ MilitaryForce MilitaryEvaluator::evaluateOurForces(){
 
 
 	if (numLightUnits > 5 || numHeavyUnits > 5) {	//i have some forces, won't return NONE
+		if (numHeavyUnits > 8 && numLightUnits > 15) {
+			return MIXED_MANY;
+		}
+		else if (numHeavyUnits < 8 && numLightUnits < 15) {
+			return MIXED_FEW;
+		}
+		else if (numHeavyUnits > 8 && numLightUnits < 10) {
+			return HEAVY_MANY;
+		}
+		else if (numHeavyUnits < 8 && numLightUnits < 5) {
+			return HEAVY_FEW;
+		}
+		else if (numHeavyUnits < 8 && numLightUnits > 15) {
+			return LIGHT_MANY;
+		}
+		else if (numHeavyUnits < 5 && numLightUnits < 15) {
+			return LIGHT_FEW;
+		}
+
 
 		//won't bother returning MIXED_MANY because HEAVY_MANY is already troublesome
-		if (numHeavyUnits > 10) {
+		/*if (numHeavyUnits > 10) {
 			return HEAVY_MANY;
 		}
 		else if (numLightUnits > 30){
@@ -228,7 +247,7 @@ MilitaryForce MilitaryEvaluator::evaluateOurForces(){
 		else if (numLightUnits > 5 && numHeavyUnits > 0){
 			return MIXED_FEW;
 		}
-		else return HEAVY_FEW;
+		else return HEAVY_FEW;*/
 	}
 
 	return NONE;
