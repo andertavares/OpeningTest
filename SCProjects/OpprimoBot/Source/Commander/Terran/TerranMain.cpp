@@ -1,9 +1,11 @@
 #include "TerranMain.h"
 #include "../../Evaluators/EconomyEvaluator.h"
 #include "../../Evaluators/MilitaryEvaluator.h"
+#include "../../Managers/Constructor.h"
 #include "../../Managers/BuildplanEntry.h"
 #include "../../Managers/AgentManager.h"
 #include "../../Managers/TechManager.h"
+#include "../../Managers/ResourceManager.h"
 #include "../../Managers/Upgrader.h"
 #include "../../Managers/Constructor.h"
 #include "../ExplorationSquad.h"
@@ -54,7 +56,7 @@ TerranMain::TerranMain()
 	squads.push_back(backupSquad2);
 
 	noWorkers = 16;
-	noWorkersPerRefinery = 2;
+	noWorkersPerRefinery = 3;
 }
 
 TerranMain::~TerranMain()
@@ -70,7 +72,7 @@ void TerranMain::computeActions()
 {
 	computeActionsBase();
 
-	noWorkers = 15 * AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Command_Center) + 2 * AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Refinery);
+	noWorkers = 15 * AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Command_Center) + 3 * AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Refinery);
 	if (noWorkers > 60) noWorkers = 60;
 
 	int cSupply = Broodwar->self()->supplyUsed() / 2;
@@ -145,7 +147,7 @@ void TerranMain::computeActions()
 	if (Commander::getInstance()->getSquad(1)->isActive() && stage == 3)
 	{
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, cSupply));
-
+		//ResourceManager::getInstance()->lockResources(UnitTypes::Terran_Command_Center);
 		scout2->addSetup(UnitTypes::Terran_Vulture, 2);
 		scout2->setBuildup(false);
 
@@ -442,15 +444,26 @@ void TerranMain::doUpgrades(){
 }
 
 void TerranMain::expand(){
-
-	//skips adding expansion to the plan if it's already there
+	Constructor* constructor = Constructor::getInstance();
+	
+	//skips adding expansion if it's already in the plan
+	if (constructor->containsType(UnitTypes::Terran_Command_Center) || constructor->isBeingBuilt(UnitTypes::Terran_Command_Center)){
+		return;
+	}
 	for (size_t i = 0; i < buildplan.size(); i++) {
 		if (buildplan.at(i).unittype == UnitTypes::Terran_Command_Center) {
 			return;
 		}
 
 	}
-	int currentSupply = Broodwar->self()->supplyUsed() / 2;
 
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, currentSupply));
+	//conditions satisfied, will expand (hopefully)
+	constructor->expand(UnitTypes::Terran_Command_Center);
+
+	//int currentSupply = Broodwar->self()->supplyUsed() / 2;
+
+	//locks resources to allow expansion
+	//buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, currentSupply));
+	
+	//ResourceManager::getInstance()->lockResources(UnitTypes::Terran_Command_Center);
 }

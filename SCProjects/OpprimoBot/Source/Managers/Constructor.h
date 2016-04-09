@@ -32,8 +32,7 @@ protected:
 	bool executeOrder(UnitType type);
 	bool shallBuildSupplyDepot();
 	string format(UnitType type);
-	/** Checks if we currently is constructing a building */
-	bool isBeingBuilt(UnitType type);
+	
 	
 	bool hasResourcesLeft();
 	int mineralsNearby(TilePosition center);
@@ -60,6 +59,9 @@ public:
 
 	/** Called each update to issue orders. */
 	void computeActions();
+
+	/** Checks if we currently is constructing a building */
+	bool isBeingBuilt(UnitType type);
 
 	/** Notifies that an own unit has been destroyed. */
 	void buildingDestroyed(Unit building);

@@ -274,6 +274,7 @@ bool Squad::isUnderAttack()
 			{
 				if (a->getUnit()->isAttacking()) return true;
 				if (a->getUnit()->isStartingAttack()) return true;
+				if (a->getUnit()->isUnderAttack()) return true;
 			}
 		}
 	}
