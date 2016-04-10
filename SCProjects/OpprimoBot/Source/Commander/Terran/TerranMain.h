@@ -14,7 +14,7 @@ using namespace std;
  */
 class TerranMain : public Commander {
 
-private:
+protected:
 	Squad* mainSquad;
 	Squad* secondarySquad;
 	Squad* backupSquad1;

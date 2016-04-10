@@ -166,6 +166,8 @@ bool Constructor::shallBuildSupply()
 	int supplyTotal = Broodwar->self()->supplyTotal() / 2;
 	int supplyUsed = Broodwar->self()->supplyUsed() / 2;
 
+	int supplyDiff = supplyTotal - supplyUsed;
+
 	int preDiff = 2;
 	//Speed up supply production in middle/late game
 	if (supplyUsed > 30) preDiff = 4;
@@ -187,14 +189,14 @@ bool Constructor::shallBuildSupply()
 		return false;
 	}
 
-	//Check if there aready is a supply in the list
-	if (nextIsOfType(supply))
+	//Check if there aready is a supply in the list, if supply is not so negative
+	if (nextIsOfType(supply) && supplyDiff > -6)
 	{
 		return false;
 	}
 
-	//Check if we are already building a supply
-	if (supplyBeingBuilt())
+	//Check if we are already building a supply, if supply is not so negative
+	if (supplyBeingBuilt() && supplyDiff > -6)
 	{
 		return false;
 	}

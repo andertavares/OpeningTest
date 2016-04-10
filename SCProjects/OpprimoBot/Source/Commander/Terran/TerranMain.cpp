@@ -13,9 +13,9 @@
 
 TerranMain::TerranMain()
 {
-	/* BEGIN: standard BO */
+	/* BEGIN: standard Build Order */
 	
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 8));
+	/*buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 8));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, 9));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Refinery, 12));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, 14));
@@ -28,22 +28,8 @@ TerranMain::TerranMain()
 	buildplan.push_back(BuildplanEntry(TechTypes::Stim_Packs, 29));
 	buildplan.push_back(BuildplanEntry(UpgradeTypes::U_238_Shells, 30));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 31));
-	
-	/* END: standard BO */
-
-	/* BEGIN: 1 Rax FE *
-	
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 9));
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, 11));
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, 15));
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 16));
-	//this below is an extension
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, 16));
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, 22));
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 24));
-	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 32));
-	
-	* END: 1 Rax FE */
+	*/
+	/* END: standard Build Order */
 
 
 

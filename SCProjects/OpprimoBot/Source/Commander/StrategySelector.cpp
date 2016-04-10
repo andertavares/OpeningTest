@@ -1,6 +1,11 @@
 #include "StrategySelector.h"
 #include "Protoss/ProtossMain.h"
 #include "Terran/TerranMain.h"
+#include "Terran\OneRaxFE.h"
+#include "Terran\ThreeRaxFactory.h"
+#include "Terran\QuickFactoryMines.h"
+#include "Terran\QuickBunkerFactory.h"
+#include "Terran\MarineRush.h"
 #include "Zerg/LurkerRush.h"
 #include "Zerg/ZergMain.h"
 #include <fstream>
@@ -12,7 +17,11 @@ StrategySelector::StrategySelector()
 	active = true;
 
 	strategies.push_back(Strategy(Races::Protoss, ProtossMain::getStrategyId()));
-	strategies.push_back(Strategy(Races::Terran, TerranMain::getStrategyId()));
+	strategies.push_back(Strategy(Races::Terran, OneRaxFE::getStrategyId()));
+	strategies.push_back(Strategy(Races::Terran, ThreeRaxFactory::getStrategyId()));
+	strategies.push_back(Strategy(Races::Terran, QuickFactoryMines::getStrategyId()));
+	strategies.push_back(Strategy(Races::Terran, QuickBunkerFactory::getStrategyId()));
+	strategies.push_back(Strategy(Races::Terran, MarineRush::getStrategyId()));
 	strategies.push_back(Strategy(Races::Zerg, LurkerRush::getStrategyId()));
 	strategies.push_back(Strategy(Races::Zerg, ZergMain::getStrategyId()));
 	
@@ -43,8 +52,12 @@ void StrategySelector::disable()
 	active = false;
 }
 
-void StrategySelector::selectStrategy()
+void StrategySelector::selectStrategy() 
 {
+	//Uncomment below to force the selection of a strategy for testing purposes
+	currentStrategyId = "3 Rax Factory";
+	return; 
+
 	int totWon = 0;
 	int totPlay = 0;
 	for (int i = 0; i < (int)stats.size(); i++)
@@ -113,7 +126,7 @@ Commander* StrategySelector::getStrategy()
 	{
 		//No strategy has been tested for this combo.
 		//Return one of the available strategies.
-		if (Broodwar->self()->getRace().getID() == Races::Terran.getID()) currentStrategyId = "TerranMain";
+		if (Broodwar->self()->getRace().getID() == Races::Terran.getID()) currentStrategyId = "Quick Factory Mines";	//Previous was TerranMain
 		if (Broodwar->self()->getRace().getID() == Races::Protoss.getID()) currentStrategyId = "ProtossMain";
 		if (Broodwar->self()->getRace().getID() == Races::Zerg.getID()) currentStrategyId = "LurkerRush";
 	}
@@ -121,6 +134,11 @@ Commander* StrategySelector::getStrategy()
 	//Get Commander for strategy
 	if (currentStrategyId == "ProtossMain") return new ProtossMain();
 	if (currentStrategyId == "TerranMain") return new TerranMain();
+	if (currentStrategyId == "1 Rax FE") return new OneRaxFE();
+	if (currentStrategyId == "3 Rax Factory") return new ThreeRaxFactory();
+	if (currentStrategyId == "Quick Factory Mines") return new QuickFactoryMines();
+	if (currentStrategyId == "Quick Bunker Factory") return new QuickBunkerFactory();
+	if (currentStrategyId == "Marine Rush") return new MarineRush();
 	if (currentStrategyId == "LurkerRush") return new LurkerRush();
 	if (currentStrategyId == "ZergMain") return new ZergMain();
 

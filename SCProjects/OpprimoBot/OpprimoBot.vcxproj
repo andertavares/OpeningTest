@@ -97,6 +97,10 @@
     <ClCompile Include="Source\Commander\RushSquad.cpp" />
     <ClCompile Include="Source\Commander\Squad.cpp" />
     <ClCompile Include="Source\Commander\StrategySelector.cpp" />
+    <ClCompile Include="Source\Commander\Terran\MarineRush.cpp" />
+    <ClCompile Include="Source\Commander\Terran\OneRaxFE.cpp" />
+    <ClCompile Include="Source\Commander\Terran\QuickBunkerFactory.cpp" />
+    <ClCompile Include="Source\Commander\Terran\QuickFactoryMines.cpp" />
     <ClCompile Include="Source\Commander\Terran\TerranMain.cpp" />
     <ClCompile Include="Source\Commander\UnitSetup.cpp" />
     <ClCompile Include="Source\Commander\Zerg\LurkerRush.cpp" />
@@ -157,6 +161,7 @@
     <ClCompile Include="Source\Utils\ProfilerObj.cpp" />
     <ClCompile Include="Source\Utils\Statistics.cpp" />
     <ClCompile Include="Source\Utils\UnitString.cpp" />
+    <ClCompile Include="Source\Commander\Terran\ThreeRaxFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AIloop.h" />
@@ -166,6 +171,10 @@
     <ClInclude Include="Source\Commander\RushSquad.h" />
     <ClInclude Include="Source\Commander\Squad.h" />
     <ClInclude Include="Source\Commander\StrategySelector.h" />
+    <ClInclude Include="Source\Commander\Terran\MarineRush.h" />
+    <ClInclude Include="Source\Commander\Terran\OneRaxFE.h" />
+    <ClInclude Include="Source\Commander\Terran\QuickBunkerFactory.h" />
+    <ClInclude Include="Source\Commander\Terran\QuickFactoryMines.h" />
     <ClInclude Include="Source\Commander\Terran\TerranMain.h" />
     <ClInclude Include="Source\Commander\UnitSetup.h" />
     <ClInclude Include="Source\Commander\Zerg\LurkerRush.h" />
@@ -226,6 +235,7 @@
     <ClInclude Include="Source\Utils\Sets.h" />
     <ClInclude Include="Source\Utils\Statistics.h" />
     <ClInclude Include="Source\Utils\UnitString.h" />
+    <ClInclude Include="Source\Commander\Terran\ThreeRaxFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

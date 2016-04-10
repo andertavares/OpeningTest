@@ -196,6 +196,21 @@
     <ClCompile Include="Source\Utils\UnitString.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Commander\Terran\OneRaxFE.cpp">
+      <Filter>Commander\Terran</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Commander\Terran\ThreeRaxFactory.cpp">
+      <Filter>Commander\Terran</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Commander\Terran\MarineRush.cpp">
+      <Filter>Commander\Terran</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Commander\Terran\QuickBunkerFactory.cpp">
+      <Filter>Commander\Terran</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Commander\Terran\QuickFactoryMines.cpp">
+      <Filter>Commander\Terran</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -394,6 +409,21 @@
     </ClInclude>
     <ClInclude Include="Source\Utils\UnitString.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commander\Terran\OneRaxFE.h">
+      <Filter>Commander\Terran</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commander\Terran\ThreeRaxFactory.h">
+      <Filter>Commander\Terran</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commander\Terran\MarineRush.h">
+      <Filter>Commander\Terran</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commander\Terran\QuickBunkerFactory.h">
+      <Filter>Commander\Terran</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Commander\Terran\QuickFactoryMines.h">
+      <Filter>Commander\Terran</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
