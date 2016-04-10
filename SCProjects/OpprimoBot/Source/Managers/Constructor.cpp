@@ -62,6 +62,7 @@ void Constructor::computeActions()
 	{
 		if (shallBuildSupply())
 		{
+			Broodwar->printf("Adding supply to BP");
 			buildPlan.insert(buildPlan.begin(), Broodwar->self()->getRace().getSupplyProvider());
 		}
 	}
@@ -174,8 +175,8 @@ bool Constructor::shallBuildSupply()
 		return false;
 	}
 	//Don't use automatic supply adding in the early game
-	//to make it a bit more controlled.
-	if (supplyUsed <= 30)
+	//to make it a bit more controlled. 
+	if (supplyUsed < 18)	//previously was 30
 	{
 		return false;
 	}
@@ -247,6 +248,7 @@ bool Constructor::supplyBeingBuilt()
 
 	return false;
 }
+
 
 void Constructor::lock(int buildPlanIndex, int unitId)
 {

@@ -245,11 +245,11 @@ void Commander::computeActionsBase()
 		sq->computeActions();
 	}
 
-	//Attack if we have filled all supply spots
+	//Attack if we have filled many supply spots
 	if (currentState == DEFEND)
 	{
 		int supplyUsed = Broodwar->self()->supplyUsed() / 2;
-		if (supplyUsed >= 198)
+		if (supplyUsed >= 100)	//previously was 198
 		{
 			forceAttack();
 		}
@@ -465,6 +465,14 @@ void Commander::checkRemovableObstacles()
 	}
 }
 
+bool Commander::inBuildPlan(UnitType type) {
+	for (auto bpEntry : buildplan) {
+		if (bpEntry.type == BuildplanEntry::BUILDING && bpEntry.unittype == type) {
+			return true;
+		}
+	}
+	return false;
+}
 
 TilePosition Commander::findChokePoint()
 {
@@ -657,7 +665,7 @@ bool Commander::checkDamagedBuildings()
 	Agentset agents = AgentManager::getInstance()->getAgents();
 	for (auto &a : agents)
 	{
-		if (a->isAlive() && a->isBuilding() && a->isDamaged())
+		if (a->isAlive() && a->isBuilding() && (a->isDamaged() || a->isConstructionHalted()))
 		{
 			Unit builder = a->getUnit()->getBuildUnit();
 			if (builder == NULL || !builder->isConstructing())

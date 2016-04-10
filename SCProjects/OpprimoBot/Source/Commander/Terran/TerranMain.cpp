@@ -13,6 +13,8 @@
 
 TerranMain::TerranMain()
 {
+	/* BEGIN: standard BO */
+	
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 8));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, 9));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Refinery, 12));
@@ -26,6 +28,24 @@ TerranMain::TerranMain()
 	buildplan.push_back(BuildplanEntry(TechTypes::Stim_Packs, 29));
 	buildplan.push_back(BuildplanEntry(UpgradeTypes::U_238_Shells, 30));
 	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 31));
+	
+	/* END: standard BO */
+
+	/* BEGIN: 1 Rax FE *
+	
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 9));
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, 11));
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, 15));
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 16));
+	//this below is an extension
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, 16));
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, 22));
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 24));
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Supply_Depot, 32));
+	
+	* END: 1 Rax FE */
+
+
 
 	mainSquad = new Squad(1, Squad::OFFENSIVE, "MainSquad", 10);
 	mainSquad->addSetup(UnitTypes::Terran_Marine, 10);
@@ -255,7 +275,12 @@ void TerranMain::enhanceMilitary(){
 	int numberMedics = agentManager->countNoUnits(UnitTypes::Terran_Medic);
 	int numberGoliaths = agentManager->countNoUnits(UnitTypes::Terran_Goliath);
 	int numberVultures = agentManager->countNoUnits(UnitTypes::Terran_Vulture);
-	int numBunkers = agentManager->countNoUnits(UnitTypes::Terran_Bunker);
+	int numBunkers = agentManager->countNoUnits(UnitTypes::Terran_Bunker)
+		+ Constructor::getInstance()->noInProduction(UnitTypes::Terran_Bunker);
+
+	int maxBarracks = 8;
+	int maxFactories = 4;
+	int maxStarports = 4;
 
 	int currentSupply = Broodwar->self()->supplyUsed() / 2;
 
@@ -268,14 +293,19 @@ void TerranMain::enhanceMilitary(){
 	if (enemyLand == HEAVY_MANY || enemyLand == HEAVY_FEW || enemyLand == MIXED_MANY) {	//respond with tanks
 		//techUpTo(Tank)
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Siege_Tank_Siege_Mode);
-		secondarySquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 8);
+		Upgrader::getInstance()->addTech(TechTypes::Tank_Siege_Mode);
+		mainSquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 8);
 		mainSquad->addSetup(UnitTypes::Terran_Marine, 10);
 		mainSquad->addSetup(UnitTypes::Terran_Medic, 3);
 
 		
 		if (economy == STRONG || economy == ABUNDANT){
-			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
-			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+			if (AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Barracks) < maxBarracks) {
+				buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
+			}
+			if (AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Factory) < maxFactories) {
+				buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+			}
 		}
 		
 
@@ -292,8 +322,12 @@ void TerranMain::enhanceMilitary(){
 		mainSquad->addSetup(UnitTypes::Terran_Marine, 6);
 		
 		if (economy == STRONG || economy == ABUNDANT){
-			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
-			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+			if (AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Barracks) < maxBarracks) {
+				buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
+			}
+			if (AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Factory) < maxFactories) {
+				buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+			}
 		}
 
 		Broodwar->printf("Responding to LIGHT enemy LAND.");
@@ -302,28 +336,36 @@ void TerranMain::enhanceMilitary(){
 	if (enemyAir == HEAVY_MANY || enemyAir == HEAVY_FEW || enemyAir == MIXED_MANY) {	//respond with anti-air
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Goliath);
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Wraith);
-		secondarySquad->addSetup(UnitTypes::Terran_Goliath, 8);
-		secondarySquad->addSetup(UnitTypes::Terran_Wraith, 8);
+		mainSquad->addSetup(UnitTypes::Terran_Goliath, 8);
+		mainSquad->addSetup(UnitTypes::Terran_Wraith, 8);
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
 
 		if (economy == STRONG || economy == ABUNDANT){
-			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Starport, currentSupply));
-			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+			if (AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Starport) < maxStarports) {
+				buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Starport, currentSupply));
+			}
+			if (AgentManager::getInstance()->countNoFinishedUnits(UnitTypes::Terran_Factory) < maxFactories) {
+				buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+			}
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Charon_Boosters);
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Terran_Vehicle_Weapons);
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Terran_Vehicle_Plating);
 		}
 
 		Broodwar->printf("Responding to HEAVY enemy AIR.");
 	}
 
 	if (enemyAir == LIGHT_MANY || enemyAir == LIGHT_FEW || enemyAir == MIXED_FEW) {	//respond with anti-air
-		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Firebat);
-		secondarySquad->addSetup(UnitTypes::Terran_Goliath, 4);
-		secondarySquad->addSetup(UnitTypes::Terran_Wraith, 4);
+		mainSquad->addSetup(UnitTypes::Terran_Goliath, 4);
+		mainSquad->addSetup(UnitTypes::Terran_Wraith, 4);
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, currentSupply));
 
 		if (economy == STRONG || economy == ABUNDANT){
+
 			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Starport, currentSupply));
 			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Charon_Boosters);
 		}
 
 		Broodwar->printf("Responding to LIGHT enemy AIR.");
@@ -332,8 +374,12 @@ void TerranMain::enhanceMilitary(){
 	//responds to enemy mech
 	if (enemyMech == HEAVY_MANY || enemyMech == LIGHT_MANY || enemyMech == MIXED_MANY) {
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Ghost);
-		TechManager::getInstance()->techUpTo(TechTypes::Lockdown);
-		TechManager::getInstance()->techUpTo(TechTypes::Personnel_Cloaking);
+		//TechManager::getInstance()->techUpTo(TechTypes::Lockdown);
+		//TechManager::getInstance()->techUpTo(TechTypes::Personnel_Cloaking);
+
+		//Broodwar->
+		Upgrader::getInstance()->addTech(TechTypes::Lockdown);
+		Upgrader::getInstance()->addTech(TechTypes::Personnel_Cloaking);
 		
 		
 		mainSquad->setSetup(UnitTypes::Terran_Ghost, 12);
@@ -342,12 +388,12 @@ void TerranMain::enhanceMilitary(){
 		Broodwar->printf("Responding to HEAVY enemy MECH.");
 	}
 
-	if (numberTanks < 12){
+	if (numberTanks < 12 && enemyLand != NONE){
 		mainSquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 4);
-		Broodwar->printf("Adding tanks to army");
+		//Broodwar->printf("Adding tanks to army");
 	}
 
-	if (unloadedMarines < 40){
+	if (unloadedMarines < 30){
 		mainSquad->addSetup(UnitTypes::Terran_Marine, 10);
 	}
 
@@ -359,14 +405,15 @@ void TerranMain::enhanceMilitary(){
 		mainSquad->addSetup(UnitTypes::Terran_Goliath, 2);
 	}
 
-	if (numberVultures < 8){
+	if (numberVultures < 8 && enemyLand != NONE) {
 		mainSquad->addSetup(UnitTypes::Terran_Vulture, 2);
 	}
 
-	/*int desiredNumBunkers = agentManager->countNoBases();
-	if (numBunkers < desiredNumBunkers) {
+	//i want at least 1 bunker per base if economy is okay
+	int desiredNumBunkers = agentManager->countNoUnits(UnitTypes::Terran_Command_Center);
+	if (!inBuildPlan(UnitTypes::Terran_Bunker) && numBunkers < desiredNumBunkers && (economy == STRONG || economy == ABUNDANT) ) {
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Bunker, currentSupply));
-	}*/
+	}
 
 	//TODO: count number of buildings that produce military and decide whether to produce more
 }

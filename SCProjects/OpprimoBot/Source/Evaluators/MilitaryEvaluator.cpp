@@ -136,9 +136,9 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyLand(){
 		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Ultralisk)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Reaver)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Archon)
-		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Sunken_Colony)
-		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Photon_Cannon)
-		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Bunker);
+		+ 2 * enemyUnits.countUnitsOfType(UnitTypes::Zerg_Sunken_Colony)		//defensive buildings count more
+		+ 2 * enemyUnits.countUnitsOfType(UnitTypes::Protoss_Photon_Cannon)
+		+ 2 * enemyUnits.countUnitsOfType(UnitTypes::Terran_Bunker);
 
 	if (numLightUnits > 0 || numHeavyUnits > 0) {	//enemy has some land force, won't return NONE
 

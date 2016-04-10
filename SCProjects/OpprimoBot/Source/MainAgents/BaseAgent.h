@@ -128,6 +128,9 @@ public:
 	/** Returns true if this agent is damaged. */
 	bool isDamaged();
 
+	/** Checks whether the contruction of this Terran building has halted (dead SCV) */
+	bool isConstructionHalted();
+
 	/** Assigns this agent to the squad with the specified id. */
 	void setSquadID(int id);
 

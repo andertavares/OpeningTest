@@ -53,7 +53,7 @@ void TechManager::computeActions(){
 
 	for (auto target : unitJobs)	{	
 		if (preRequisitesSatisfiedFor(target.first)){
-			Broodwar->printf("Pre-reqs sat'ed for %s", target.first.c_str());
+			//Broodwar->printf("Pre-reqs sat'ed for %s", target.first.c_str());
 			unitJobs.emplace(target.first, ACCOMPLISHED);
 			break;
 		}

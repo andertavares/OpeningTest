@@ -86,6 +86,7 @@ void OpprimoBot::onStart()
 	//Set speed
 	speed = 0;
 	Broodwar->setLocalSpeed(speed);
+	//Broodwar->setGUI(false);	//uncomment to go blazingly fast o/
 
 	Profiler::getInstance()->end("OnInit");
 }

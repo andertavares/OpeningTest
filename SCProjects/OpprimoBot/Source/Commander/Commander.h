@@ -91,6 +91,9 @@ public:
 	/** Called each update to issue orders. */
 	virtual void computeActions() {}
 
+	/** Returns whether a given unit type is present in build plan */
+	bool inBuildPlan(UnitType type);
+
 	/** Returns the number of preferred workers, i.e. the
 	 * number of workers should be built. */
 	int getNoWorkers();

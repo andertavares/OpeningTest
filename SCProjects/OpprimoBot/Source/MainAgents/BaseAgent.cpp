@@ -189,6 +189,23 @@ bool BaseAgent::isDamaged()
 	return false;
 }
 
+bool BaseAgent::isConstructionHalted() {
+	Unit bldg = getUnit();
+	//1: am I a terran building?
+	if (!bldg->getType().isBuilding() || !bldg->getType().getRace() != Races::Terran) {
+		return false;
+	}
+
+	//2: if i'm finished, i'm not halted
+	if (bldg->isCompleted()) {
+		return false;
+	}
+
+	//3: returns whether my construction is in progress?
+	return bldg->getBuildUnit() != NULL || !bldg->isBeingConstructed();
+
+}
+
 bool BaseAgent::isDetectorWithinRange(TilePosition pos, int range)
 {
 	for (auto &u : Broodwar->enemy()->getUnits())
