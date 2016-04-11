@@ -55,7 +55,7 @@ void StrategySelector::disable()
 void StrategySelector::selectStrategy() 
 {
 	//Uncomment below to force the selection of a strategy for testing purposes
-	currentStrategyId = "3 Rax Factory";
+	currentStrategyId = "Marine Rush";
 	return; 
 
 	int totWon = 0;
