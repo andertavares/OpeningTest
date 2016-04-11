@@ -2,6 +2,7 @@
 #define __COMMANDER_H__
 
 #include "Squad.h"
+#include "ExplorationSquad.h"
 #include "../MainAgents/BaseAgent.h"
 #include "../Managers/BuildplanEntry.h"
 #include <BWTA.h>
@@ -90,6 +91,9 @@ public:
 
 	/** Called each update to issue orders. */
 	virtual void computeActions() {}
+
+	/** Sets up a scouting squad. If none exists or all are empty, creates one with a worker */
+	virtual Squad* setUpScout();
 
 	/** Returns whether a given unit type is present in build plan */
 	bool inBuildPlan(UnitType type);

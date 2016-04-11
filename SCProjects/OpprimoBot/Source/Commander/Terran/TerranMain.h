@@ -19,8 +19,8 @@ protected:
 	Squad* secondarySquad;
 	Squad* backupSquad1;
 	Squad* backupSquad2;
+	Squad* rush1;
 	Squad* scout1;
-	Squad* scout2;
 
 	/** time (seconds) since last evaluation */
 	int lastTimeChecked;

@@ -1,5 +1,6 @@
 #include "Commander.h"
 #include "StrategySelector.h"
+#include "ExplorationSquad.h"
 #include "../Evaluators/MilitaryEvaluator.h"
 #include "../Managers/AgentManager.h"
 #include "../Managers/ExplorationManager.h"
@@ -463,6 +464,47 @@ void Commander::checkRemovableObstacles()
 			}
 		}
 	}
+}
+
+Squad* Commander::setUpScout() {
+	Squad* scout;
+	
+	//tries to find an Exploration Squad
+	bool found = false;
+	for (auto a : squads) {
+		if (a->isExplorer()) {
+			//found an explorer squad
+			scout = a;
+			found = true;
+			break;
+		}
+	}
+	if (!found) {	//Exploration Squad not found, will create one
+		scout = new ExplorationSquad(11, "ScoutingSquad1", 11);
+		scout->setRequired(false);
+		squads.push_back(scout);
+	}
+
+	//if squad has no member, adds a worker to it
+	if (scout->size() == 0){ // && Broodwar->elapsedTime() > 60 && Broodwar->elapsedTime() < 600 && cSupply == 8) {
+
+		//adds a setup of 1 worker to squad
+		scout->addSetup(Broodwar->self()->getRace().getWorker(), 1);
+
+		//finds a free worker and adds it to the squad
+		BaseAgent* freeWorker = AgentManager::getInstance()->findClosestFreeWorker(Broodwar->self()->getStartLocation());
+		if (freeWorker != NULL) {
+			scout->addMember(freeWorker);
+			Broodwar->printf("Added a worker to Exploration Squad.");
+		}
+		else {
+			Broodwar->printf("ERROR: couldn't find free worker to scout.");
+		}
+	}
+	scout->setPriority(1);
+	scout->setActivePriority(1000);
+	scout->forceActive();
+	return scout;
 }
 
 bool Commander::inBuildPlan(UnitType type) {

@@ -126,7 +126,7 @@ Commander* StrategySelector::getStrategy()
 	{
 		//No strategy has been tested for this combo.
 		//Return one of the available strategies.
-		if (Broodwar->self()->getRace().getID() == Races::Terran.getID()) currentStrategyId = "Quick Factory Mines";	//Previous was TerranMain
+		if (Broodwar->self()->getRace().getID() == Races::Terran.getID()) currentStrategyId = "Marine Rush";	//Previous was TerranMain
 		if (Broodwar->self()->getRace().getID() == Races::Protoss.getID()) currentStrategyId = "ProtossMain";
 		if (Broodwar->self()->getRace().getID() == Races::Zerg.getID()) currentStrategyId = "LurkerRush";
 	}

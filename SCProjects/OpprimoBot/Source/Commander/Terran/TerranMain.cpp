@@ -44,12 +44,12 @@ TerranMain::TerranMain()
 	secondarySquad->setBuildup(true);
 	squads.push_back(secondarySquad);
 
-	scout1 = new RushSquad(10, "ScoutingSquad1", 11);
-	scout1->setRequired(false);
+	rush1 = new RushSquad(10, "RushSquad1", 11);
+	rush1->setRequired(false);
 	
-	scout2 = new ExplorationSquad(11, "ScoutingSquad2", 11);
-	scout2->setRequired(false);
-	squads.push_back(scout2);
+	scout1 = new ExplorationSquad(11, "ScoutingSquad1", 11);
+	scout1->setRequired(false);
+	squads.push_back(scout1);
 
 	backupSquad1 = new Squad(5, Squad::OFFENSIVE, "BackupSquad1", 11);
 	backupSquad1->setRequired(false);
@@ -86,30 +86,8 @@ void TerranMain::computeActions()
 	int gas = Broodwar->self()->gas();
 
 	//select a worker to scout: between 1 and 10 minutes of game, with 8 supply, if nobody else is scouting
-	if (scout2->size() == 0 && Broodwar->elapsedTime() > 60 && Broodwar->elapsedTime() < 600 && cSupply == 8){
-		BaseAgent* freeWorker = AgentManager::getInstance()->findClosestFreeWorker(Broodwar->self()->getStartLocation());
-		if (freeWorker != NULL) {
-			scout2->addSetup(UnitTypes::Terran_SCV, 1);
-			scout2->addMember(freeWorker);
-			scout2->setPriority(1);
-			scout2->setActivePriority(1000);
-			scout2->forceActive();
-			//workaround double-push error
-			bool found = false;
-			for (auto a : squads){
-				if (a == scout2) {
-					found = true;
-					break;
-				}
-			}
-			if (!found) {
-				squads.push_back(scout2);
-				Broodwar->printf("Exploration squad created.");
-			}
-		}
-		else {
-			Broodwar->printf("ERROR: couldn't find free worker to scout.");
-		}
+	if (scout1->size() == 0 && Broodwar->elapsedTime() > 60 && Broodwar->elapsedTime() < 600 && cSupply == 8) {
+		setUpScout();
 	}
 
 
@@ -138,10 +116,10 @@ void TerranMain::computeActions()
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, cSupply));
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Missile_Turret, cSupply));
 
-		scout1->addSetup(UnitTypes::Terran_Vulture, 1);
-		scout1->setPriority(1);
-		scout1->setActivePriority(1000);
-		squads.push_back(scout1);
+		rush1->addSetup(UnitTypes::Terran_Vulture, 1);
+		rush1->setPriority(1);
+		rush1->setActivePriority(1000);
+		squads.push_back(rush1);
 
 		secondarySquad->addSetup(UnitTypes::Terran_Siege_Tank_Tank_Mode, 2);
 		secondarySquad->addSetup(UnitTypes::Terran_Marine, 8);
@@ -154,8 +132,8 @@ void TerranMain::computeActions()
 	{
 		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, cSupply));
 		//ResourceManager::getInstance()->lockResources(UnitTypes::Terran_Command_Center);
-		scout2->addSetup(UnitTypes::Terran_Vulture, 2);
-		scout2->setBuildup(false);
+		scout1->addSetup(UnitTypes::Terran_Vulture, 2);
+		scout1->setBuildup(false);
 
 		stage++;
 	}

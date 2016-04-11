@@ -11,7 +11,7 @@ enum Stage {
 };
 
 class MarineRush : public TerranMain {
-	Stage stage;	//counts steps to implement some actions
+	Stage gameStage;	//counts steps to implement some actions
 
 public:
 	MarineRush();

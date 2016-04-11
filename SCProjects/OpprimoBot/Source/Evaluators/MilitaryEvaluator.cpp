@@ -134,6 +134,8 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyLand(){
 	 numHeavyUnits = enemyUnits.countUnitsOfType(UnitTypes::Terran_Siege_Tank_Siege_Mode)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Terran_Siege_Tank_Tank_Mode)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Ultralisk)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Lurker)
+		+ enemyUnits.countUnitsOfType(UnitTypes::Zerg_Lurker_Egg)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Reaver)
 		+ enemyUnits.countUnitsOfType(UnitTypes::Protoss_Archon)
 		+ 2 * enemyUnits.countUnitsOfType(UnitTypes::Zerg_Sunken_Colony)		//defensive buildings count more
@@ -161,18 +163,6 @@ MilitaryForce MilitaryEvaluator::evaluateEnemyLand(){
 			return LIGHT_FEW;
 		}
 
-		/*
-		else if (numLightUnits > 10 && numHeavyUnits < 3){
-			return LIGHT_MANY;
-		}
-		else if (numLightUnits < 10 && numHeavyUnits < 3){
-			return LIGHT_FEW;
-		}
-		else if (numLightUnits > 0 && numHeavyUnits > 0){
-			return MIXED_FEW;
-		}
-		else return HEAVY_FEW;
-		*/
 	}
 
 	return NONE;
@@ -185,6 +175,8 @@ MilitaryForce MilitaryEvaluator::evaluateOurForces(){
 	int numHeavyUnits = agentManager->countNoFinishedUnits(UnitTypes::Terran_Siege_Tank_Siege_Mode)
 		+ agentManager->countNoFinishedUnits(UnitTypes::Terran_Siege_Tank_Tank_Mode)
 		+ agentManager->countNoFinishedUnits(UnitTypes::Zerg_Ultralisk)
+		+ agentManager->countNoFinishedUnits(UnitTypes::Zerg_Lurker)
+		+ agentManager->countNoFinishedUnits(UnitTypes::Zerg_Lurker_Egg)
 		+ agentManager->countNoFinishedUnits(UnitTypes::Protoss_Reaver)
 		+ agentManager->countNoFinishedUnits(UnitTypes::Protoss_Archon)
 		
@@ -230,24 +222,6 @@ MilitaryForce MilitaryEvaluator::evaluateOurForces(){
 		else if (numHeavyUnits < 5 && numLightUnits < 15) {
 			return LIGHT_FEW;
 		}
-
-
-		//won't bother returning MIXED_MANY because HEAVY_MANY is already troublesome
-		/*if (numHeavyUnits > 10) {
-			return HEAVY_MANY;
-		}
-		else if (numLightUnits > 30){
-			if (numHeavyUnits > 7) return MIXED_MANY;
-			else return LIGHT_MANY;
-		}
-		else if (numLightUnits < 10) {
-			if (numHeavyUnits < 3) return LIGHT_FEW;
-			else return MIXED_FEW;
-		}
-		else if (numLightUnits > 5 && numHeavyUnits > 0){
-			return MIXED_FEW;
-		}
-		else return HEAVY_FEW;*/
 	}
 
 	return NONE;
