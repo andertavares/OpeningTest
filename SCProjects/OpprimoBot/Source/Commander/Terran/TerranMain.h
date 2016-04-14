@@ -43,6 +43,12 @@ public:
 	/** Research some techs / advance in Tech Tree */
 	void techUp();
 
+	/** Enhances tech/upgrades for infantry */
+	void techInfantryUp();
+
+	/** Enhances mechanic units up */
+	void techMechanicUp();
+
 	/** Research some upgrades so that units get better/stronger */
 	void doUpgrades();
 

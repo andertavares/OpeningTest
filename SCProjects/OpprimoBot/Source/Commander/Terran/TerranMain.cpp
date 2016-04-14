@@ -184,7 +184,7 @@ void TerranMain::computeActions()
 }
 
 void TerranMain::defaultAction(){
-	if (buildplan.size() > 0 && Broodwar->elapsedTime() < 60 * 10) return;	//skips doing anything if buildplan is not satisfied before 10 minutes
+	if (/*buildplan.size() > 0 && */Broodwar->elapsedTime() < 60 * 10) return;	//skips doing anything if buildplan is not satisfied before 10 minutes
 	if (Broodwar->elapsedTime() - lastTimeChecked < 5) return;	//check every 5 seconds
 	
 	lastTimeChecked = Broodwar->elapsedTime();
@@ -383,6 +383,9 @@ void TerranMain::enhanceMilitary(){
 }
 
 void TerranMain::techUp(){
+
+	techInfantryUp();
+
 	//tests if we have barracks or it is in build order
 	if (!AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Barracks) && !Constructor::getInstance()->containsType(UnitTypes::Terran_Barracks)){
 		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Barracks);
@@ -447,6 +450,65 @@ void TerranMain::techUp(){
 			TechManager::getInstance()->techUpTo(UnitTypes::Terran_Medic);	
 		}
 	}
+
+}
+
+void TerranMain::techInfantryUp() {
+	Broodwar->printf("Teching infantry up...");
+	int currentSupply = Broodwar->self()->supplyUsed() / 2;
+	PlayerInterface* self = Broodwar->self();
+	Upgrader* upgrader = Upgrader::getInstance();
+
+	//counts infantry members 
+	int numMarines = 0, numFirebats = 0, numMedics = 0, numGhosts = 0;
+	
+	for (auto s : squads) {
+		numMarines += s->countMembersOfType(UnitTypes::Terran_Marine);
+		numFirebats += s->countMembersOfType(UnitTypes::Terran_Firebat);
+		numMedics += s->countMembersOfType(UnitTypes::Terran_Medic);
+		numGhosts += s->countMembersOfType(UnitTypes::Terran_Ghost);
+	}
+
+	//if more than 5 marines, research increased range
+	Broodwar->printf("u238 level: %d", self->getUpgradeLevel(UpgradeTypes::U_238_Shells));
+	if (numMarines > 5 && !self->isUpgrading(UpgradeTypes::U_238_Shells) && self->getUpgradeLevel(UpgradeTypes::U_238_Shells) == 0) {
+		Broodwar->printf("Adding U-238 Shells upgrade");
+		
+		upgrader->addUpgrade(UpgradeTypes::U_238_Shells);
+		//buildplan.push_back(BuildplanEntry(, currentSupply));
+	}
+
+	//if more than 10 infantry, upgrade weapons and armor and research Stim Pack
+	if (numMarines + numFirebats + numGhosts > 10) {
+		Broodwar->printf("Adding infantry weapons/armor upgrades");
+		//upgrader->addUpgrade(UpgradeType::)
+		upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Weapons);
+		upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Armor);
+		//buildplan.push_back(BuildplanEntry(UpgradeTypes::Terran_Infantry_Weapons, currentSupply));
+		//buildplan.push_back(BuildplanEntry(UpgradeTypes::Terran_Infantry_Armor, currentSupply));
+
+		if (!self->isResearching(TechTypes::Stim_Packs) && !self->hasResearched(TechTypes::Stim_Packs)) {
+			Broodwar->printf("Adding Stim Packs research");
+			upgrader->addTech(TechTypes::Stim_Packs);
+			//buildplan.push_back(BuildplanEntry(TechTypes::Stim_Packs, currentSupply));
+		}
+	}
+
+	//if have ghosts, research lockdown and cloack
+	if (numGhosts > 3) {
+		if (!self->isResearching(TechTypes::Personnel_Cloaking) && !self->hasResearched(TechTypes::Personnel_Cloaking)) {
+			Broodwar->printf("Adding Personnel Cloaking research");
+			upgrader->addTech(TechTypes::Personnel_Cloaking);
+		}
+
+		if (!self->isResearching(TechTypes::Lockdown) && !self->hasResearched(TechTypes::Lockdown)) {
+			upgrader->addTech(TechTypes::Lockdown);
+		}
+
+	}
+}
+
+void TerranMain::techMechanicUp() {
 
 }
 
