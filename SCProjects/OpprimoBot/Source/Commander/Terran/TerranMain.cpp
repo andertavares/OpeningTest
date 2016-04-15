@@ -457,7 +457,7 @@ void TerranMain::improveEconomy() {
 	Agentset* bases = agentManager->getAgentsOfType(UnitTypes::Terran_Command_Center);
 
 	for (auto base : *bases) {	//TODO: create a method for this
-		Unitset closeFromBase = Broodwar->getUnitsInRadius(base->getUnit()->getPosition(), 8);
+		Unitset closeFromBase = Broodwar->getUnitsInRadius(base->getUnit()->getPosition(), 8 * 32);	//8 tiles * 32 pixels per tile
 
 		for (auto unit: closeFromBase) {
 			if (unit->getType().isMineralField()) {
@@ -608,27 +608,34 @@ void TerranMain::techInfantryUp() {
 		numGhosts += s->countMembersOfType(UnitTypes::Terran_Ghost);
 	}
 
-	//if more than 5 marines, research increased range
-	Broodwar->printf("U-238 level: %d", self->getUpgradeLevel(UpgradeTypes::U_238_Shells));
+	//if more than 5 marines, research increased range and checks need for academy
 	if (numMarines > 5 && !self->isUpgrading(UpgradeTypes::U_238_Shells) && self->getUpgradeLevel(UpgradeTypes::U_238_Shells) == 0) {
-		Broodwar->printf("Adding U-238 Shells upgrade");
-		
-		upgrader->addUpgrade(UpgradeTypes::U_238_Shells);
+		if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Academy)) {
+			Broodwar->printf("Adding Academy");
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Academy, currentSupply));
+		}
+		else {
+			Broodwar->printf("Adding U-238 Shells upgrade");
+			upgrader->addUpgrade(UpgradeTypes::U_238_Shells);
+		}
 		//buildplan.push_back(BuildplanEntry(, currentSupply));
 	}
 
 	//if more than 10 infantry, upgrade weapons and armor and research Stim Pack
 	if (numMarines + numFirebats + numGhosts > 10) {
-		Broodwar->printf("Adding infantry weapons/armor upgrades");
-		upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Weapons);
-		upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Armor);
-		//buildplan.push_back(BuildplanEntry(UpgradeTypes::Terran_Infantry_Weapons, currentSupply));
-		//buildplan.push_back(BuildplanEntry(UpgradeTypes::Terran_Infantry_Armor, currentSupply));
+		if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Engineering_Bay)) {
+			Broodwar->printf("Adding Eng. Bay");
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Engineering_Bay, currentSupply));
+		}
 
+		else {
+			Broodwar->printf("Adding infantry weapons/armor upgrades");
+			upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Weapons);
+			upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Armor);
+		}
 		if (!self->isResearching(TechTypes::Stim_Packs) && !self->hasResearched(TechTypes::Stim_Packs)) {
 			Broodwar->printf("Adding Stim Packs research");
 			upgrader->addTech(TechTypes::Stim_Packs);
-			//buildplan.push_back(BuildplanEntry(TechTypes::Stim_Packs, currentSupply));
 		}
 	}
 
@@ -669,7 +676,9 @@ void TerranMain::expand(){
 	}
 
 	//conditions satisfied, will expand (hopefully)
-	constructor->expand(UnitTypes::Terran_Command_Center);
+	//constructor->expand(UnitTypes::Terran_Command_Center);
+	int currentSupply = Broodwar->self()->supplyUsed() / 2;
+	buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, currentSupply));
 
 	//int currentSupply = Broodwar->self()->supplyUsed() / 2;
 
