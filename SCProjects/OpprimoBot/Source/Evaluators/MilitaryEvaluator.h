@@ -46,6 +46,9 @@ public:
 	/** Returns a string representation of the Military Force */
 	static string stringOf(MilitaryForce force);
 
+	/** Returns whether enemy has Air Force that must be countered */
+	bool needAntiAir();
+
 	/** Returns whether opponent forces has light melee and should be dealt accordingly */
 	bool shouldRespondLightMelee();
 };

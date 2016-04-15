@@ -206,16 +206,15 @@ void TerranMain::defaultAction(){
 
 	if (economyStrength == ABUNDANT){
 		Broodwar->printf("Abundant economy :-D");
-
-		enhanceMilitary(true);
 		techUp();
 		doUpgrades();
+		enhanceMilitary(true);
 	}
 	else if (economyStrength == STRONG){
 		Broodwar->printf("Strong economy :-)");
 		expand();
-		enhanceMilitary(true);
 		techUp();
+		enhanceMilitary(true);
 	}
 	else if (economyStrength == INTERMEDIATE){
 		Broodwar->printf("Intermediate economy :-|");
@@ -380,14 +379,68 @@ void TerranMain::enhanceMilitary(bool force){
 	}
 
 	//TODO: count number of buildings that produce military and decide whether to produce more
+	//TODO: handle locked resources
 
 	//demands all idle military buildings to produce units
 	if (force) {
-		for (auto bldg : AgentManager::getInstance()->getAgents()) {
-			if (bldg->isBuilding()) {
-				//TODO resume from here
+		AgentManager* agentManager = AgentManager::getInstance();
+		Agentset* barracks = agentManager->getAgentsOfType(UnitTypes::Terran_Barracks);
+		Agentset* factories = agentManager->getAgentsOfType(UnitTypes::Terran_Factory); 
+		Agentset* starports = agentManager->getAgentsOfType(UnitTypes::Terran_Starport);
+
+		//TODO: count minerals and gas spent to prevent depleting resources
+
+		//handle idle barracks
+		int totalMarines = agentManager->countNoUnits(UnitTypes::Terran_Marine);
+		int totalFirebats = agentManager->countNoUnits(UnitTypes::Terran_Firebat);
+		int totalMedics = agentManager->countNoUnits(UnitTypes::Terran_Medic);
+		for (auto b : *barracks) {
+			if (b->getUnit()->isIdle()) {
+
+				//trains medics until reach 1/3 of infantry number
+				if (totalMedics < (totalMarines + totalFirebats) / 3) {
+					b->getUnit()->train(UnitTypes::Terran_Medic);
+					totalMedics++;
+				}
+				//trains firebats until we have up to 1/3 of marines
+				else if (totalFirebats < totalMarines / 3) {
+					b->getUnit()->train(UnitTypes::Terran_Firebat);
+					totalFirebats++;
+				}
+				else {
+					b->getUnit()->train(UnitTypes::Terran_Marine);
+					totalMarines++;
+				}
 			}
 		}
+
+		//handle idle factories, if we need anti air, train goliaths up to a certain number
+		bool needAntiAir = MilitaryEvaluator::getInstance()->needAntiAir();
+		int trainedGoliaths = 0;
+		for (auto f : *factories) {
+			if (f->getUnit()->isIdle()) {
+				if (needAntiAir && trainedGoliaths < 4) {
+					f->getUnit()->train(UnitTypes::Terran_Goliath);
+					trainedGoliaths++;
+				}
+				else {
+					f->getUnit()->train(UnitTypes::Terran_Siege_Tank_Tank_Mode);
+				}
+			}
+		}
+
+		//idle starports produce wraiths
+		for (auto s : *starports) {
+			if (s->getUnit()->isIdle()) {
+				s->getUnit()->train(UnitTypes::Terran_Wraith);
+			}
+		}
+
+		//prevent memory leaks?
+		delete barracks;
+		delete factories;
+		delete starports;
+		
 	}
 }
 
@@ -430,10 +483,10 @@ void TerranMain::improveEconomy() {
 
 	if ((economy == WEAK || economy == INTERMEDIATE) && gameSeconds > 600) {
 		int currentSupply = Broodwar->self()->supplyUsed() / 2;
-		Broodwar->printf("Locking resources to build Cmd Center");
-		ResourceManager::getInstance()->lockResources(UnitTypes::Terran_Command_Center);
-		Constructor::getInstance()->expand(UnitTypes::Terran_Command_Center);
-		//buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, currentSupply));
+		//Broodwar->printf("Locking resources to build Cmd Center");
+		//ResourceManager::getInstance()->lockResources(UnitTypes::Terran_Command_Center);
+		//Constructor::getInstance()->expand(UnitTypes::Terran_Command_Center);
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, currentSupply));
 	}
 
 	delete bases;	//avoid memory leak?
@@ -468,6 +521,17 @@ void TerranMain::techUp(){
 	MilitaryForce enemyAir = MilitaryEvaluator::getInstance()->evaluateEnemyAir();
 	if (enemyAir == MIXED_FEW || enemyAir == MIXED_MANY || enemyAir == LIGHT_MANY || enemyAir == HEAVY_FEW || enemyAir == HEAVY_MANY){
 
+		//if we don't have a factory and armory, build one for goliaths
+		if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Factory)) {
+			Broodwar->printf("Adding Factory to counter enemy air");
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+		}
+
+		if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Armory)) {
+			Broodwar->printf("Adding Armory to counter enemy air");
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Armory, currentSupply));
+		}
+
 		//check for goliath pre-reqs
 		if (TechManager::getInstance()->preRequisitesSatisfiedFor(UnitTypes::Terran_Goliath)){
 			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Charon_Boosters);
@@ -475,6 +539,12 @@ void TerranMain::techUp(){
 		}
 		else {
 			TechManager::getInstance()->techUpTo(UnitTypes::Terran_Goliath);
+		}
+
+		//if we don't have a Starport and armory, build one for Wraiths
+		if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Starport)) {
+			Broodwar->printf("Adding Starport to counter enemy air");
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Starport, currentSupply));
 		}
 
 		//check for wraith pre-reqs
@@ -490,12 +560,20 @@ void TerranMain::techUp(){
 	MilitaryForce enemyLand = MilitaryEvaluator::getInstance()->evaluateEnemyLand();
 	if (enemyLand == HEAVY_FEW || enemyLand == HEAVY_MANY || enemyLand == MIXED_FEW || enemyLand == MIXED_MANY) {
 		//respond with heavy land
+
+		//if we don't have a factory build one for tanks
+		if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Factory)) {
+			Broodwar->printf("Adding Factory to counter enemy land");
+			buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Factory, currentSupply));
+		}
+
 		//check for tank pre-reqs
 		if (TechManager::getInstance()->preRequisitesSatisfiedFor(UnitTypes::Terran_Siege_Tank_Siege_Mode)){
 			Upgrader::getInstance()->addUpgrade(UpgradeTypes::Terran_Vehicle_Weapons);
 		}
 		else {
-			TechManager::getInstance()->techUpTo(UnitTypes::Terran_Siege_Tank_Siege_Mode);	//TODO: check if Siege Mode is being researched
+			Upgrader::getInstance()->addTech(TechTypes::Tank_Siege_Mode);
+			//TechManager::getInstance()->techUpTo(UnitTypes::Terran_Siege_Tank_Siege_Mode);	//TODO: check if Siege Mode is being researched
 		}
 
 	}
@@ -531,7 +609,7 @@ void TerranMain::techInfantryUp() {
 	}
 
 	//if more than 5 marines, research increased range
-	Broodwar->printf("u238 level: %d", self->getUpgradeLevel(UpgradeTypes::U_238_Shells));
+	Broodwar->printf("U-238 level: %d", self->getUpgradeLevel(UpgradeTypes::U_238_Shells));
 	if (numMarines > 5 && !self->isUpgrading(UpgradeTypes::U_238_Shells) && self->getUpgradeLevel(UpgradeTypes::U_238_Shells) == 0) {
 		Broodwar->printf("Adding U-238 Shells upgrade");
 		
@@ -542,7 +620,6 @@ void TerranMain::techInfantryUp() {
 	//if more than 10 infantry, upgrade weapons and armor and research Stim Pack
 	if (numMarines + numFirebats + numGhosts > 10) {
 		Broodwar->printf("Adding infantry weapons/armor upgrades");
-		//upgrader->addUpgrade(UpgradeType::)
 		upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Weapons);
 		upgrader->addUpgrade(UpgradeTypes::Terran_Infantry_Armor);
 		//buildplan.push_back(BuildplanEntry(UpgradeTypes::Terran_Infantry_Weapons, currentSupply));

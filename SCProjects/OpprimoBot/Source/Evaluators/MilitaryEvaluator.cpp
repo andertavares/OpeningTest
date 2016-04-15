@@ -227,6 +227,15 @@ MilitaryForce MilitaryEvaluator::evaluateOurForces(){
 	return NONE;
 }
 
+bool MilitaryEvaluator::needAntiAir() {
+	MilitaryForce enemyAir = evaluateEnemyAir();
+
+	return (
+		enemyAir == LIGHT_MANY || enemyAir == MIXED_FEW
+		|| enemyAir == MIXED_MANY || enemyAir == HEAVY_FEW || enemyAir == HEAVY_MANY
+	);
+}
+
 string MilitaryEvaluator::stringOf(MilitaryForce force){
 	if (force == NONE) return "None";
 	if (force == LIGHT_FEW) return "Light, few";
