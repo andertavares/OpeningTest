@@ -62,7 +62,7 @@ void Constructor::computeActions()
 	{
 		if (shallBuildSupply())
 		{
-			Broodwar->printf("Adding supply to BP");
+			//Broodwar->printf("Adding supply to BP");
 			buildPlan.insert(buildPlan.begin(), Broodwar->self()->getRace().getSupplyProvider());
 		}
 	}

@@ -83,6 +83,9 @@ public:
 	/** Returns a list of all agents in the container. */
 	const Agentset& getAgents();
 
+	/** Returns an Agentset with all agents of a given type. */
+	Agentset* getAgentsOfType(UnitType type);
+
 	/** Returns a reference to the agent associated with a specific unit,
 	 * or NULL if the unit doesn't exist. */
 	BaseAgent* getAgent(int unitID);

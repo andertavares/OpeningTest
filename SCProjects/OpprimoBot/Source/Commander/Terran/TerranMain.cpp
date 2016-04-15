@@ -207,31 +207,31 @@ void TerranMain::defaultAction(){
 	if (economyStrength == ABUNDANT){
 		Broodwar->printf("Abundant economy :-D");
 
-		enhanceMilitary();
+		enhanceMilitary(true);
 		techUp();
 		doUpgrades();
 	}
 	else if (economyStrength == STRONG){
 		Broodwar->printf("Strong economy :-)");
 		expand();
-		enhanceMilitary();
+		enhanceMilitary(true);
 		techUp();
 	}
 	else if (economyStrength == INTERMEDIATE){
 		Broodwar->printf("Intermediate economy :-|");
-		//expand or military up
-		enhanceMilitary();
+		improveEconomy();
+		enhanceMilitary(false);
 	}
 	else if (economyStrength == WEAK){
 		Broodwar->printf("Weak economy :(");
-		//militaryUp
-		enhanceMilitary();
+		improveEconomy();
+		//enhanceMilitary();
 	}
 
 	
 }
 
-void TerranMain::enhanceMilitary(){
+void TerranMain::enhanceMilitary(bool force){
 	AgentManager* agentManager = AgentManager::getInstance();
 	int numberTanks = agentManager->countNoUnits(UnitTypes::Terran_Siege_Tank_Siege_Mode) + agentManager->countNoUnits(UnitTypes::Terran_Siege_Tank_Tank_Mode);
 	int unloadedMarines = agentManager->countUnloadedUnits(UnitTypes::Terran_Marine);
@@ -380,28 +380,89 @@ void TerranMain::enhanceMilitary(){
 	}
 
 	//TODO: count number of buildings that produce military and decide whether to produce more
+
+	//demands all idle military buildings to produce units
+	if (force) {
+		for (auto bldg : AgentManager::getInstance()->getAgents()) {
+			if (bldg->isBuilding()) {
+				//TODO resume from here
+			}
+		}
+	}
+}
+
+void TerranMain::improveEconomy() {
+	AgentManager* agentManager = AgentManager::getInstance();
+	int numWorkers = agentManager->countNoUnits(UnitTypes::Terran_SCV);
+	if (numWorkers >= 60) {
+		Broodwar->printf("Already with max. workers. No actions will be performed to improve economy.");
+		return;
+	}
+
+	//counts number of accessible minerals
+	int mineralPatches = 0;
+	Agentset* bases = agentManager->getAgentsOfType(UnitTypes::Terran_Command_Center);
+
+	for (auto base : *bases) {	//TODO: create a method for this
+		Unitset closeFromBase = Broodwar->getUnitsInRadius(base->getUnit()->getPosition(), 8);
+
+		for (auto unit: closeFromBase) {
+			if (unit->getType().isMineralField()) {
+				mineralPatches++;
+			}
+		}
+	}
+	Broodwar->printf("Found %d mineral patches", mineralPatches);
+	int desiredNumWorkers = 3 * mineralPatches;
+
+	if (noWorkers >= desiredNumWorkers) {
+		Broodwar->printf("NoWorkers already covers needs");
+	}
+	else {
+		Broodwar->printf("Increasing noWorkers from %d to %d", noWorkers, desiredNumWorkers);
+		noWorkers = desiredNumWorkers;
+		if (noWorkers > 60) noWorkers = 60;
+	}
+
+	//checks the need for an expansion
+	EconomyStrength economy = EconomyEvaluator::getInstance()->evaluateEconomy();
+	int gameSeconds = Broodwar->elapsedTime();
+
+	if ((economy == WEAK || economy == INTERMEDIATE) && gameSeconds > 600) {
+		int currentSupply = Broodwar->self()->supplyUsed() / 2;
+		Broodwar->printf("Locking resources to build Cmd Center");
+		ResourceManager::getInstance()->lockResources(UnitTypes::Terran_Command_Center);
+		Constructor::getInstance()->expand(UnitTypes::Terran_Command_Center);
+		//buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Command_Center, currentSupply));
+	}
+
+	delete bases;	//avoid memory leak?
+
 }
 
 void TerranMain::techUp(){
 
 	techInfantryUp();
 
+	int currentSupply = Broodwar->self()->supplyUsed();
+
 	//tests if we have barracks or it is in build order
-	if (!AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Barracks) && !Constructor::getInstance()->containsType(UnitTypes::Terran_Barracks)){
-		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Barracks);
+	if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Barracks)){
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Barracks, currentSupply));
+		//TechManager::getInstance()->techUpTo(UnitTypes::Terran_Barracks);
 		return;
 	}
 
 
 	//basic stuff: academy, engineering bay
-	if (!AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Academy) && !Constructor::getInstance()->containsType(UnitTypes::Terran_Academy)){
-		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Academy);
+	if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Academy)) {
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Academy, currentSupply));
+		//TechManager::getInstance()->techUpTo(UnitTypes::Terran_Academy);
 	}
-	if (!AgentManager::getInstance()->countNoUnits(UnitTypes::Terran_Engineering_Bay) && !Constructor::getInstance()->containsType(UnitTypes::Terran_Engineering_Bay)){
-		TechManager::getInstance()->techUpTo(UnitTypes::Terran_Engineering_Bay);
+	if (Constructor::getInstance()->needBuilding(UnitTypes::Terran_Engineering_Bay)) {
+		buildplan.push_back(BuildplanEntry(UnitTypes::Terran_Engineering_Bay, currentSupply));
+		//TechManager::getInstance()->techUpTo(UnitTypes::Terran_Engineering_Bay);
 	}
-
-
 
 	//if enemy is going airborne, we'd better research goliath range // wraith 
 	MilitaryForce enemyAir = MilitaryEvaluator::getInstance()->evaluateEnemyAir();
@@ -518,11 +579,11 @@ void TerranMain::doUpgrades(){
 
 void TerranMain::expand(){
 	Constructor* constructor = Constructor::getInstance();
-	
+	/*
 	//skips adding expansion if it's already in the plan
 	if (constructor->containsType(UnitTypes::Terran_Command_Center) || constructor->isBeingBuilt(UnitTypes::Terran_Command_Center)){
 		return;
-	}
+	}*/
 	for (size_t i = 0; i < buildplan.size(); i++) {
 		if (buildplan.at(i).unittype == UnitTypes::Terran_Command_Center) {
 			return;

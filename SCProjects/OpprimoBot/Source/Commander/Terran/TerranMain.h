@@ -37,8 +37,11 @@ public:
 	/** Actions to do when game condition doesn't match the expected ones in computeActions */
 	void defaultAction();
 
-	/** Train more military units */
-	void enhanceMilitary();
+	/** Train more military units. Parameter 'force' demands all idle buildings to produce something */
+	void enhanceMilitary(bool force);
+
+	/** Perform actions to advance economy */
+	void improveEconomy();
 
 	/** Research some techs / advance in Tech Tree */
 	void techUp();

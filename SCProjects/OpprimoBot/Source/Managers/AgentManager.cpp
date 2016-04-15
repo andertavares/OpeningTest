@@ -42,6 +42,16 @@ const Agentset& AgentManager::getAgents()
 	return agents;
 }
 
+Agentset* AgentManager::getAgentsOfType(UnitType type) {
+	Agentset* theAgents = new Agentset();
+	for (auto a : agents) {
+		if (a->getUnitType() == type) {
+			theAgents->insert(a);
+		}
+	}
+	return theAgents;
+}
+
 BaseAgent* AgentManager::getAgent(int unitID)
 {
 	for (auto &a : agents)
