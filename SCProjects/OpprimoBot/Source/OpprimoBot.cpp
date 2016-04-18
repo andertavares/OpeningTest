@@ -13,7 +13,7 @@
 #include "Utils/Config.h"
 #include "Commander/StrategySelector.h"
 #include "Utils/Statistics.h"
-
+#include "Data/MatchData.h"
 #include "Managers/AgentManager.h"
 #include <Shlwapi.h>
 
@@ -31,6 +31,8 @@ void OpprimoBot::onStart()
 	StrategySelector::getInstance()->enable();
 
 	Profiler::getInstance()->start("OnInit");
+
+	MatchData::getInstance()->registerMatchBegin();
 
 	//Needed for text commands to work
 	Broodwar->enableFlag(Flag::UserInput);
@@ -109,6 +111,7 @@ void OpprimoBot::gameStopped()
 	delete NavigationAgent::getInstance();
 	delete StrategySelector::getInstance();
 	delete MapManager::getInstance();
+	delete MatchData::getInstance();
 }
 
 void OpprimoBot::onEnd(bool isWinner)
@@ -122,6 +125,9 @@ void OpprimoBot::onEnd(bool isWinner)
 	StrategySelector::getInstance()->addResult(win);
 	StrategySelector::getInstance()->saveStats();
 	Statistics::getInstance()->saveResult(win);
+
+	MatchData::getInstance()->registerMatchFinish(win);
+	MatchData::getInstance()->writeResult();
 
 	gameStopped();
 }

@@ -211,6 +211,7 @@
     <ClCompile Include="Source\Commander\Terran\QuickFactoryMines.cpp">
       <Filter>Commander\Terran</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Data\MatchData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -425,6 +426,7 @@
     <ClInclude Include="Source\Commander\Terran\QuickFactoryMines.h">
       <Filter>Commander\Terran</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Data\MatchData.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Commander">

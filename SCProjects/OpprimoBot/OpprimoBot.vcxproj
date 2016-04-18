@@ -105,6 +105,7 @@
     <ClCompile Include="Source\Commander\UnitSetup.cpp" />
     <ClCompile Include="Source\Commander\Zerg\LurkerRush.cpp" />
     <ClCompile Include="Source\Commander\Zerg\ZergMain.cpp" />
+    <ClCompile Include="Source\Data\MatchData.cpp" />
     <ClCompile Include="Source\Dll.cpp" />
     <ClCompile Include="Source\Evaluators\EconomyEvaluator.cpp" />
     <ClCompile Include="Source\Evaluators\MilitaryEvaluator.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="Source\Commander\UnitSetup.h" />
     <ClInclude Include="Source\Commander\Zerg\LurkerRush.h" />
     <ClInclude Include="Source\Commander\Zerg\ZergMain.h" />
+    <ClInclude Include="Source\Data\MatchData.h" />
     <ClInclude Include="Source\Evaluators\EconomyEvaluator.h" />
     <ClInclude Include="Source\Evaluators\MilitaryEvaluator.h" />
     <ClInclude Include="Source\Influencemap\MapManager.h" />
