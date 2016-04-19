@@ -217,6 +217,9 @@
     <ClCompile Include="Source\Data\MatchData.cpp">
       <Filter>Data</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Data\Configuration.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -435,6 +438,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="Source\Data\MatchData.h">
+      <Filter>Data</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Data\Configuration.h">
       <Filter>Data</Filter>
     </ClInclude>
   </ItemGroup>
