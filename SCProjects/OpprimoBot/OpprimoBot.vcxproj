@@ -161,6 +161,7 @@
     <ClCompile Include="Source\Utils\Profiler.cpp" />
     <ClCompile Include="Source\Utils\ProfilerObj.cpp" />
     <ClCompile Include="Source\Utils\Statistics.cpp" />
+    <ClCompile Include="Source\Utils\tinyxml2.cpp" />
     <ClCompile Include="Source\Utils\UnitString.cpp" />
     <ClCompile Include="Source\Commander\Terran\ThreeRaxFactory.cpp" />
   </ItemGroup>
@@ -236,6 +237,7 @@
     <ClInclude Include="Source\Utils\ProfilerObj.h" />
     <ClInclude Include="Source\Utils\Sets.h" />
     <ClInclude Include="Source\Utils\Statistics.h" />
+    <ClInclude Include="Source\Utils\tinyxml2.h" />
     <ClInclude Include="Source\Utils\UnitString.h" />
     <ClInclude Include="Source\Commander\Terran\ThreeRaxFactory.h" />
   </ItemGroup>

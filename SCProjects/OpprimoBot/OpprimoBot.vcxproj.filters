@@ -211,7 +211,12 @@
     <ClCompile Include="Source\Commander\Terran\QuickFactoryMines.cpp">
       <Filter>Commander\Terran</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Data\MatchData.cpp" />
+    <ClCompile Include="Source\Utils\tinyxml2.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Data\MatchData.cpp">
+      <Filter>Data</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\OpprimoBot.h" />
@@ -426,7 +431,12 @@
     <ClInclude Include="Source\Commander\Terran\QuickFactoryMines.h">
       <Filter>Commander\Terran</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Data\MatchData.h" />
+    <ClInclude Include="Source\Utils\tinyxml2.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Data\MatchData.h">
+      <Filter>Data</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Commander">
@@ -482,6 +492,9 @@
     </Filter>
     <Filter Include="Evaluators">
       <UniqueIdentifier>{43248ac2-3a2f-4ef3-a142-25959a5f0da5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{b462b6a1-9980-4660-ba2b-8d59d8378ff3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
