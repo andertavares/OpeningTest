@@ -1,5 +1,6 @@
 #include "Statistics.h"
 #include "../Data/Configuration.h"
+#include "../Commander/StrategySelector.h"
 #include <fstream>
 
 Statistics* Statistics::instance = NULL;
@@ -48,26 +49,19 @@ void Statistics::saveResult(int win)
 	if (!active) return;
 
 	stringstream ss;
-	ss << Broodwar->self()->getRace().getName();
-	ss << ";";
-	ss << Broodwar->enemy()->getRace().getName();
-	ss << ";";
-	ss << Broodwar->mapFileName();
-	ss << ";";
+	ss << Broodwar->self()->getRace().getName() << ";";
+	ss << StrategySelector::getInstance()->getStrategyID() << ";";
+	ss << Broodwar->enemy()->getRace().getName() << ";";
+	ss << Broodwar->mapFileName() << ";";
 	if (win == 1) ss << "Won";
 	if (win == 0) ss << "Lost";
 	if (win == 2) ss << "Draw";
 	ss << ";";
-	ss << Broodwar->self()->getUnitScore();
-	ss << ";";
-	ss << Broodwar->self()->getBuildingScore();
-	ss << ";";
-	ss << Broodwar->self()->getKillScore();
-	ss << ";";
-	ss << Broodwar->enemy()->getUnitScore();
-	ss << ";";
-	ss << Broodwar->enemy()->getBuildingScore();
-	ss << ";";
+	ss << Broodwar->self()->getUnitScore() << ";";
+	ss << Broodwar->self()->getBuildingScore() << ";";
+	ss << Broodwar->self()->getKillScore() << ";";
+	ss << Broodwar->enemy()->getUnitScore() << ";";
+	ss << Broodwar->enemy()->getBuildingScore() << ";";
 	ss << Broodwar->enemy()->getKillScore();
 	ss << "\n";
 

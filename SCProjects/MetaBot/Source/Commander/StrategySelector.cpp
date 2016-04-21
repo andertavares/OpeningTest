@@ -57,17 +57,20 @@ void StrategySelector::disable()
 
 void StrategySelector::selectStrategy() 
 {
-	//Uncomment below to force the selection of a strategy for testing purposes
-	currentStrategyId = Configuration::getInstance()->buildOrderID;
-	Broodwar->printf("Selected strategy: %s", currentStrategyId.c_str());
+	//retrieve what config says about strategy
+	string strategyId = Configuration::getInstance()->buildOrderID;
 	
 	//in case of metagame, will choose strategy probabilistically
-	if (currentStrategyId == "metagame") {
+	if (strategyId == "metagame") {
 		currentStrategyId = metaGame();
 	}
+	else {	//otherwise, use strategy explicitly described in config. 
+		currentStrategyId = strategyId;
+	}
+	Broodwar->printf("Selected strategy is: %s", currentStrategyId);
 	return;
 
-	int totWon = 0;
+	/*int totWon = 0;
 	int totPlay = 0;
 	for (int i = 0; i < (int)stats.size(); i++)
 	{
@@ -114,10 +117,9 @@ void StrategySelector::selectStrategy()
 				return;
 			}
 		}		
-	}
+	}*/
 }
 
-//TODO: it seems that metaGame deserves a class on its own
 string StrategySelector::metaGame() {
 	using namespace tinyxml2;
 
@@ -135,7 +137,7 @@ string StrategySelector::metaGame() {
 			Configuration::getInstance()->metaGamefile.c_str(), 
 			doc.ErrorName()
 		);
-		return "Quick Bunker Factory";	//returns a default strategy
+		return defaultOpening;	//returns a default strategy
 	}
 
 	XMLElement* metaGameEntry = doc.FirstChildElement("metagame")->FirstChildElement("opening");
@@ -149,7 +151,7 @@ string StrategySelector::metaGame() {
 
 
 	//openings loaded, now will select one
-	float sum = 0.f; //sum should add to 1.0, but this is to ensuer abnormal cases
+	float sum = 0.f; //probabilities should add to 1.0, but this is to guard against abnormal cases
 	for (auto opening : openings) {
 		sum += opening.second;
 	}
@@ -178,7 +180,7 @@ string StrategySelector::metaGame() {
 
 Commander* StrategySelector::getStrategy()
 {
-	int tot = 0;
+	/*int tot = 0;
 	for (int i = 0; i < (int)stats.size(); i++)
 	{
 		if (stats.at(i).matches()) tot++;
@@ -197,9 +199,13 @@ Commander* StrategySelector::getStrategy()
 		if (Broodwar->self()->getRace().getID() == Races::Terran.getID()) currentStrategyId = "Marine Rush";	//Previous was TerranMain
 		if (Broodwar->self()->getRace().getID() == Races::Protoss.getID()) currentStrategyId = "ProtossMain";
 		if (Broodwar->self()->getRace().getID() == Races::Zerg.getID()) currentStrategyId = "LurkerRush";
-	}
+	}*/
 
-	//Get Commander for strategy
+	//begin: new code - only select strategy, no counting from statistics
+	selectStrategy();
+	//end: new code - only select strategy, no counting from statistics
+
+	//Get Commander for strategy -- TODO: return a single "commander" that loads a pre-defined build-order
 	if (currentStrategyId == "ProtossMain") return new ProtossMain();
 	if (currentStrategyId == "TerranMain") return new TerranMain();
 	if (currentStrategyId == "1 Rax FE") return new OneRaxFE();
@@ -211,6 +217,10 @@ Commander* StrategySelector::getStrategy()
 	if (currentStrategyId == "ZergMain") return new ZergMain();
 
 	return NULL;
+}
+
+string StrategySelector::getStrategyID() {
+	return currentStrategyId;
 }
 
 void StrategySelector::printInfo()
@@ -315,7 +325,7 @@ int StrategySelector::toInt(string &str)
 string StrategySelector::getFilename()
 {
 	stringstream ss;
-	ss << "bwapi-data\\AI\\";
+	ss << Configuration::INPUT_DIR; // "bwapi-data\\AI\\";
 	//ss << "bwapi-data\\read\\"; //Tournament persistent storage version
 	ss << "Strategies_MetaBot.csv";
 	
@@ -325,7 +335,7 @@ string StrategySelector::getFilename()
 string StrategySelector::getWriteFilename()
 {
 	stringstream ss;
-	ss << "bwapi-data\\AI\\";
+	ss << Configuration::OUTPUT_DIR;	// "bwapi-data\\AI\\";
 	//ss << "bwapi-data\\write\\"; //Tournament persistent storage version
 	ss << "Strategies_MetaBot.csv";
 	

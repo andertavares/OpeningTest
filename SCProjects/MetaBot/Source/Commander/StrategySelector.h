@@ -105,6 +105,9 @@ public:
 	/** Returns the selected strategy for this game. */
 	Commander* getStrategy();
 
+	/** Returns the ID/name of current strategy. */
+	string getStrategyID();
+
 	/** Loads the stats file. */
 	void loadStats();
 
