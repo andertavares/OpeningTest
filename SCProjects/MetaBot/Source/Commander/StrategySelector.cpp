@@ -67,7 +67,7 @@ void StrategySelector::selectStrategy()
 	else {	//otherwise, use strategy explicitly described in config. 
 		currentStrategyId = strategyId;
 	}
-	Broodwar->printf("Selected strategy is: %s", currentStrategyId);
+	//Broodwar->printf("Selected strategy is: %s", currentStrategyId); - was causing 'broodwar not initialized' error
 	return;
 
 	/*int totWon = 0;
