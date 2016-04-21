@@ -220,6 +220,11 @@
       <Filter>Data</Filter>
     </ClCompile>
     <ClCompile Include="Source\MetaBot.cpp" />
+    <ClCompile Include="Source\ParseUtils.cpp" />
+    <ClCompile Include="Source\JSONTools.cpp" />
+    <ClCompile Include="Source\Commander\TextParserStrategy.cpp">
+      <Filter>Commander</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\AIloop.h" />
@@ -443,6 +448,11 @@
       <Filter>Data</Filter>
     </ClInclude>
     <ClInclude Include="Source\MetaBot.h" />
+    <ClInclude Include="Source\ParseUtils.h" />
+    <ClInclude Include="Source\JSONTools.h" />
+    <ClInclude Include="Source\Commander\TextParserStrategy.h">
+      <Filter>Commander</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Commander">

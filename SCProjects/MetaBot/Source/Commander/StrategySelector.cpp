@@ -1,3 +1,5 @@
+#include "TextParserStrategy.h"
+
 #include "StrategySelector.h"
 #include "Protoss/ProtossMain.h"
 #include "Terran/TerranMain.h"
@@ -18,6 +20,8 @@ StrategySelector* StrategySelector::instance = NULL;
 StrategySelector::StrategySelector()
 {
 	active = true;
+
+    strategies.push_back(Strategy(Races::Terran, TextParserStrategy::getStrategyId()));
 
 	strategies.push_back(Strategy(Races::Protoss, ProtossMain::getStrategyId()));
 	strategies.push_back(Strategy(Races::Terran, OneRaxFE::getStrategyId()));

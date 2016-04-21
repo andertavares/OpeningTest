@@ -102,6 +102,7 @@
     <ClCompile Include="Source\Commander\Terran\QuickBunkerFactory.cpp" />
     <ClCompile Include="Source\Commander\Terran\QuickFactoryMines.cpp" />
     <ClCompile Include="Source\Commander\Terran\TerranMain.cpp" />
+    <ClCompile Include="Source\Commander\TextParserStrategy.cpp" />
     <ClCompile Include="Source\Commander\UnitSetup.cpp" />
     <ClCompile Include="Source\Commander\Zerg\LurkerRush.cpp" />
     <ClCompile Include="Source\Commander\Zerg\ZergMain.cpp" />
@@ -111,6 +112,7 @@
     <ClCompile Include="Source\Evaluators\EconomyEvaluator.cpp" />
     <ClCompile Include="Source\Evaluators\MilitaryEvaluator.cpp" />
     <ClCompile Include="Source\Influencemap\MapManager.cpp" />
+    <ClCompile Include="Source\JSONTools.cpp" />
     <ClCompile Include="Source\MainAgents\AgentFactory.cpp" />
     <ClCompile Include="Source\MainAgents\BaseAgent.cpp" />
     <ClCompile Include="Source\MainAgents\TargetingAgent.cpp" />
@@ -125,6 +127,7 @@
     <ClCompile Include="Source\Managers\TechManager.cpp" />
     <ClCompile Include="Source\Managers\Upgrader.cpp" />
     <ClCompile Include="Source\MetaBot.cpp" />
+    <ClCompile Include="Source\ParseUtils.cpp" />
     <ClCompile Include="Source\Pathfinding\NavigationAgent.cpp" />
     <ClCompile Include="Source\Pathfinding\Pathfinder.cpp" />
     <ClCompile Include="Source\Pathfinding\PathObj.cpp" />
@@ -179,6 +182,7 @@
     <ClInclude Include="Source\Commander\Terran\QuickBunkerFactory.h" />
     <ClInclude Include="Source\Commander\Terran\QuickFactoryMines.h" />
     <ClInclude Include="Source\Commander\Terran\TerranMain.h" />
+    <ClInclude Include="Source\Commander\TextParserStrategy.h" />
     <ClInclude Include="Source\Commander\UnitSetup.h" />
     <ClInclude Include="Source\Commander\Zerg\LurkerRush.h" />
     <ClInclude Include="Source\Commander\Zerg\ZergMain.h" />
@@ -187,6 +191,7 @@
     <ClInclude Include="Source\Evaluators\EconomyEvaluator.h" />
     <ClInclude Include="Source\Evaluators\MilitaryEvaluator.h" />
     <ClInclude Include="Source\Influencemap\MapManager.h" />
+    <ClInclude Include="Source\JSONTools.h" />
     <ClInclude Include="Source\MainAgents\AgentFactory.h" />
     <ClInclude Include="Source\MainAgents\BaseAgent.h" />
     <ClInclude Include="Source\MainAgents\TargetingAgent.h" />
@@ -201,6 +206,7 @@
     <ClInclude Include="Source\Managers\TechManager.h" />
     <ClInclude Include="Source\Managers\Upgrader.h" />
     <ClInclude Include="Source\MetaBot.h" />
+    <ClInclude Include="Source\ParseUtils.h" />
     <ClInclude Include="Source\Pathfinding\NavigationAgent.h" />
     <ClInclude Include="Source\Pathfinding\Pathfinder.h" />
     <ClInclude Include="Source\Pathfinding\PathObj.h" />

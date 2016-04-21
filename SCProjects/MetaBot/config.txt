@@ -1,0 +1,8 @@
+{
+	"Build name" :
+	{
+		"Supply Depot": [9, 16, 18, 20, 28],
+		"Barracks": [11, 13, 22],
+		"Refinery": [22]
+	}
+}
