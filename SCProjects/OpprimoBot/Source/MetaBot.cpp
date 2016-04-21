@@ -1,4 +1,4 @@
-#include "OpprimoBot.h"
+#include "MetaBot.h"
 #include "Managers/Constructor.h"
 #include "Managers/ExplorationManager.h"
 #include "Managers\TechManager.h"
@@ -24,7 +24,7 @@ bool analyzed;
 bool analysis_just_finished;
 bool leader = false;
 
-void OpprimoBot::onStart()
+void MetaBot::onStart()
 {
 	Broodwar->printf("onStart!");
 	
@@ -100,7 +100,7 @@ void OpprimoBot::onStart()
 	Profiler::getInstance()->end("OnInit");
 }
 
-void OpprimoBot::gameStopped()
+void MetaBot::gameStopped()
 {
 	Pathfinder::getInstance()->stop();
 	Profiler::getInstance()->dumpToFile();
@@ -121,7 +121,7 @@ void OpprimoBot::gameStopped()
 	delete MatchData::getInstance();
 }
 
-void OpprimoBot::onEnd(bool isWinner)
+void MetaBot::onEnd(bool isWinner)
 {
 	if (Broodwar->elapsedTime() / 60 < 4) return;
 
@@ -139,7 +139,7 @@ void OpprimoBot::onEnd(bool isWinner)
 	gameStopped();
 }
 
-void OpprimoBot::onFrame()
+void MetaBot::onFrame()
 {
 	Profiler::getInstance()->start("OnFrame");
 
@@ -175,7 +175,7 @@ void OpprimoBot::onFrame()
 	Profiler::getInstance()->end("OnFrame");
 }
 
-void OpprimoBot::onSendText(std::string text)
+void MetaBot::onSendText(std::string text)
 {
 	if (text == "a") {
 		Commander::getInstance()->forceAttack();
@@ -259,17 +259,17 @@ void OpprimoBot::onSendText(std::string text)
 	}
 }
 
-void OpprimoBot::onReceiveText(BWAPI::Player player, std::string text)
+void MetaBot::onReceiveText(BWAPI::Player player, std::string text)
 {
 	Broodwar << player->getName() << " said '" << text << "'" << endl;
 }
 
-void OpprimoBot::onPlayerLeft(BWAPI::Player player)
+void MetaBot::onPlayerLeft(BWAPI::Player player)
 {
 
 }
 
-void OpprimoBot::onNukeDetect(BWAPI::Position target)
+void MetaBot::onNukeDetect(BWAPI::Position target)
 {
 	if (target != Positions::Unknown)
 	{
@@ -282,7 +282,7 @@ void OpprimoBot::onNukeDetect(BWAPI::Position target)
 	}
 }
 
-void OpprimoBot::onUnitDiscover(BWAPI::Unit unit)
+void MetaBot::onUnitDiscover(BWAPI::Unit unit)
 {
 	if (Broodwar->isReplay() || Broodwar->getFrameCount() <= 1) return;
 
@@ -295,12 +295,12 @@ void OpprimoBot::onUnitDiscover(BWAPI::Unit unit)
 	}
 }
 
-void OpprimoBot::onUnitEvade(BWAPI::Unit unit)
+void MetaBot::onUnitEvade(BWAPI::Unit unit)
 {
 
 }
 
-void OpprimoBot::onUnitShow(BWAPI::Unit unit)
+void MetaBot::onUnitShow(BWAPI::Unit unit)
 {
 	if (Broodwar->isReplay() || Broodwar->getFrameCount() <= 1) return;
 
@@ -313,12 +313,12 @@ void OpprimoBot::onUnitShow(BWAPI::Unit unit)
 	}
 }
 
-void OpprimoBot::onUnitHide(BWAPI::Unit unit)
+void MetaBot::onUnitHide(BWAPI::Unit unit)
 {
 
 }
 
-void OpprimoBot::onUnitCreate(BWAPI::Unit unit)
+void MetaBot::onUnitCreate(BWAPI::Unit unit)
 {
 	if (unit->getPlayer()->getID() == Broodwar->self()->getID())
 	{
@@ -326,19 +326,19 @@ void OpprimoBot::onUnitCreate(BWAPI::Unit unit)
 	}
 }
 
-void OpprimoBot::onUnitComplete(BWAPI::Unit unit)
+void MetaBot::onUnitComplete(BWAPI::Unit unit)
 {
 	
 }
 
-void OpprimoBot::onUnitDestroy(BWAPI::Unit unit)
+void MetaBot::onUnitDestroy(BWAPI::Unit unit)
 {
 	if (Broodwar->isReplay() || Broodwar->getFrameCount() <= 1) return;
 
 	loop.unitDestroyed(unit);
 }
 
-void OpprimoBot::onUnitMorph(BWAPI::Unit unit)
+void MetaBot::onUnitMorph(BWAPI::Unit unit)
 {
 	if (Broodwar->isReplay() || Broodwar->getFrameCount() <= 1) return;
 
@@ -355,12 +355,12 @@ void OpprimoBot::onUnitMorph(BWAPI::Unit unit)
 	}
 }
 
-void OpprimoBot::onUnitRenegade(BWAPI::Unit unit)
+void MetaBot::onUnitRenegade(BWAPI::Unit unit)
 {
 
 }
 
-void OpprimoBot::onSaveGame(std::string gameName)
+void MetaBot::onSaveGame(std::string gameName)
 {
 	Broodwar << "The game was saved to '" << gameName << "'" << endl;
 }

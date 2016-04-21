@@ -20,7 +20,7 @@ DWORD WINAPI AnalyzeThread();
 * using BWAPI. See the BWAPI documentation for more info.
 *
 */
-class OpprimoBot : public BWAPI::AIModule
+class MetaBot : public BWAPI::AIModule
 {
 private:
 	bool running;

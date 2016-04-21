@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Source\Dll.cpp" />
-    <ClCompile Include="Source\OpprimoBot.cpp" />
     <ClCompile Include="Source\AIloop.cpp" />
     <ClCompile Include="Source\Managers\BuildingPlacer.cpp">
       <Filter>Managers</Filter>
@@ -220,9 +219,9 @@
     <ClCompile Include="Source\Data\Configuration.cpp">
       <Filter>Data</Filter>
     </ClCompile>
+    <ClCompile Include="Source\MetaBot.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\OpprimoBot.h" />
     <ClInclude Include="Source\AIloop.h" />
     <ClInclude Include="Source\Managers\BuildingPlacer.h">
       <Filter>Managers</Filter>
@@ -443,6 +442,7 @@
     <ClInclude Include="Source\Data\Configuration.h">
       <Filter>Data</Filter>
     </ClInclude>
+    <ClInclude Include="Source\MetaBot.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Commander">

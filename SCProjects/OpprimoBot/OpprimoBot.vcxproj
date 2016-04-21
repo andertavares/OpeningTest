@@ -14,7 +14,7 @@
     <ProjectGuid>{2E63AE74-758A-4607-9DE4-D28E814A6E13}</ProjectGuid>
     <RootNamespace>ExampleAIModule</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>OpprimoBot</ProjectName>
+    <ProjectName>MetaBot</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -124,7 +124,7 @@
     <ClCompile Include="Source\Managers\SpottedObject.cpp" />
     <ClCompile Include="Source\Managers\TechManager.cpp" />
     <ClCompile Include="Source\Managers\Upgrader.cpp" />
-    <ClCompile Include="Source\OpprimoBot.cpp" />
+    <ClCompile Include="Source\MetaBot.cpp" />
     <ClCompile Include="Source\Pathfinding\NavigationAgent.cpp" />
     <ClCompile Include="Source\Pathfinding\Pathfinder.cpp" />
     <ClCompile Include="Source\Pathfinding\PathObj.cpp" />
@@ -200,7 +200,7 @@
     <ClInclude Include="Source\Managers\SpottedObject.h" />
     <ClInclude Include="Source\Managers\TechManager.h" />
     <ClInclude Include="Source\Managers\Upgrader.h" />
-    <ClInclude Include="Source\OpprimoBot.h" />
+    <ClInclude Include="Source\MetaBot.h" />
     <ClInclude Include="Source\Pathfinding\NavigationAgent.h" />
     <ClInclude Include="Source\Pathfinding\Pathfinder.h" />
     <ClInclude Include="Source\Pathfinding\PathObj.h" />
