@@ -11,6 +11,7 @@
 #include "../Pathfinding/Pathfinder.h"
 #include "../MainAgents/WorkerAgent.h"
 #include "../Utils/Profiler.h"
+#include "../Data/Configuration.h"
 #include <algorithm>
 
 Commander* Commander::instance = NULL;
@@ -29,6 +30,8 @@ Commander::Commander()
 
 	noWorkersPerRefinery = 2;
 	noWorkers = 5;
+
+	Broodwar->printf("Commander on");
 }
 
 Commander::~Commander()
@@ -44,6 +47,8 @@ Commander* Commander::getInstance()
 {
 	if (instance == NULL)
 	{
+		//initializes configuration - prevents an error where strategy is chosen before onStart
+		Configuration::getInstance()->parseConfig();
 		instance = StrategySelector::getInstance()->getStrategy();
 	}
 	return instance;

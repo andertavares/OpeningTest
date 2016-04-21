@@ -1,4 +1,5 @@
 #include "Statistics.h"
+#include "../Data/Configuration.h"
 #include <fstream>
 
 Statistics* Statistics::instance = NULL;
@@ -35,7 +36,7 @@ void Statistics::disable()
 string Statistics::getFilename()
 {
 	stringstream ss;
-	ss << "bwapi-data\\AI\\";
+	ss << Configuration::OUTPUT_DIR;	//bwapi-data/AI or /write
 	//ss << "bwapi-data\\write\\"; //Tournament persistent storage version
 	ss << "Statistics_OpprimoBot.csv";
 	

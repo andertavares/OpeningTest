@@ -8,6 +8,7 @@
 #include "Terran\MarineRush.h"
 #include "Zerg/LurkerRush.h"
 #include "Zerg/ZergMain.h"
+#include "../Data/Configuration.h"
 #include <fstream>
 
 StrategySelector* StrategySelector::instance = NULL;
@@ -55,7 +56,8 @@ void StrategySelector::disable()
 void StrategySelector::selectStrategy() 
 {
 	//Uncomment below to force the selection of a strategy for testing purposes
-	currentStrategyId = "Quick Factory Mines";
+	currentStrategyId = Configuration::getInstance()->buildOrderID;
+	Broodwar->printf("Selected strategy: %s", currentStrategyId.c_str());
 	return; 
 
 	int totWon = 0;

@@ -14,6 +14,7 @@
 #include "Commander/StrategySelector.h"
 #include "Utils/Statistics.h"
 #include "Data/MatchData.h"
+#include "Data\Configuration.h"
 #include "Managers/AgentManager.h"
 #include <Shlwapi.h>
 
@@ -25,6 +26,9 @@ bool leader = false;
 
 void OpprimoBot::onStart()
 {
+	Broodwar->printf("onStart!");
+	
+
 	//Enable/disable file writing stuff
 	Profiler::getInstance()->disable();
 	Statistics::getInstance()->enable();
@@ -86,9 +90,12 @@ void OpprimoBot::onStart()
 	//End Debug mode
 
 	//Set speed
-	speed = 0;
+	speed = Configuration::getInstance()->speed;
+	Broodwar->printf("Setting speed to %d", speed);
 	Broodwar->setLocalSpeed(speed);
-	//Broodwar->setGUI(false);	//uncomment to go blazingly fast o/
+	bool gui = Configuration::getInstance()->enableGUI;
+	Broodwar->printf("Setting GUI to %s", gui ? "enabled" : "disabled");
+	Broodwar->setGUI(gui);	
 
 	Profiler::getInstance()->end("OnInit");
 }
