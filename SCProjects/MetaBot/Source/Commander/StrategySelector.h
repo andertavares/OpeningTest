@@ -69,7 +69,7 @@ struct Strategy {
 
 /** When a game is started a strategy is selected depending on the map and, if known,
  * the opponent race. After each game the result is stored to a statistics file
- * (bwapi-data/AI/Strategies_OpprimoBot.csv). Strategies that previously have been
+ * (bwapi-data/AI/Strategies_MetaBot.csv). Strategies that previously have been
  * successful have a higher probability of being selected, but all strategies have
  * at least 15% chance of being used. 
  *

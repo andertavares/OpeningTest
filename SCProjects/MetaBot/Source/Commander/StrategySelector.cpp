@@ -317,7 +317,7 @@ string StrategySelector::getFilename()
 	stringstream ss;
 	ss << "bwapi-data\\AI\\";
 	//ss << "bwapi-data\\read\\"; //Tournament persistent storage version
-	ss << "Strategies_OpprimoBot.csv";
+	ss << "Strategies_MetaBot.csv";
 	
 	return ss.str();
 }
@@ -327,7 +327,7 @@ string StrategySelector::getWriteFilename()
 	stringstream ss;
 	ss << "bwapi-data\\AI\\";
 	//ss << "bwapi-data\\write\\"; //Tournament persistent storage version
-	ss << "Strategies_OpprimoBot.csv";
+	ss << "Strategies_MetaBot.csv";
 	
 	return ss.str();
 }

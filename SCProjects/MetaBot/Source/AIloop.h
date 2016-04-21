@@ -4,7 +4,7 @@
 #include "MainAgents/BaseAgent.h"
 
 /** This class handles the main AI loop that is executed each frame. It is 
- * separated from the OpprimoBot::onFrame().
+ * separated from the MetaBot::onFrame().
  *
  * Author: Johan Hagelback (johan.hagelback@gmail.com)
  */

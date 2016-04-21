@@ -38,7 +38,7 @@ string Statistics::getFilename()
 	stringstream ss;
 	ss << Configuration::OUTPUT_DIR;	//bwapi-data/AI or /write
 	//ss << "bwapi-data\\write\\"; //Tournament persistent storage version
-	ss << "Statistics_OpprimoBot.csv";
+	ss << "Statistics_MetaBot.csv";
 	
 	return ss.str();
 }

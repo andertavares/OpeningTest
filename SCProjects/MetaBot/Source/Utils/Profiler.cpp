@@ -81,7 +81,7 @@ void Profiler::dumpToFile()
 	if (!active) return;
 
 	ofstream ofile;
-	ofile.open("bwapi-data\\AI\\Profiling_OpprimoBot.html");
+	ofile.open("bwapi-data\\AI\\Profiling_MetaBot.html");
 	
 	ofile << "<html><head>\n";
 	ofile << "<style type='text/css'>\n";
@@ -91,7 +91,7 @@ void Profiler::dumpToFile()
 	ofile << "td.h {background-color: #ccccff; text-align: center;}\n";
 	ofile << "td {background-color: white; text-align: center;}\n";
 	ofile << "</style>\n";
-	ofile << "<title>OpprimoBot Profiler</title></head><body>\n";
+	ofile << "<title>MetaBot Profiler</title></head><body>\n";
 	ofile << "<table>";
 
 	ofile << "<tr><td class='h'>";
