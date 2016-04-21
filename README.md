@@ -1,4 +1,11 @@
-# OpprimoBot
+# MetaBot
+
+MetaBot is a fork of OpprimoBot. On top of that great codebase, we built some meta-reasoning so that the bot can smartly choose its opening strategy. 
+
+MetaBot also has an improved post-opening reasoning, being able to adapt itself to the enemy to a certain extent.
+
+Below, the original description of father OpprimoBot:
+
 OpprimoBot is an AI bot for Starcraft:Broodwar. It uses the BWAPI project to communicate with the Starcraft engine. 
 It can play all three races on (almost) all maps, but works best with Terrans.
 
