@@ -26,9 +26,6 @@ bool leader = false;
 
 void MetaBot::onStart()
 {
-	Broodwar->printf("onStart!");
-	
-
 	//Enable/disable file writing stuff
 	Profiler::getInstance()->disable();
 	Statistics::getInstance()->enable();
@@ -91,10 +88,12 @@ void MetaBot::onStart()
 
 	//Set speed
 	speed = Configuration::getInstance()->speed;
-	Broodwar->printf("Setting speed to %d", speed);
+	Broodwar->printf("Setting speed to %d.", speed);
 	Broodwar->setLocalSpeed(speed);
+
+	//set gui
 	bool gui = Configuration::getInstance()->enableGUI;
-	Broodwar->printf("Setting GUI to %s", gui ? "enabled" : "disabled");
+	Broodwar->printf("Setting GUI to %s.", gui ? "enabled" : "disabled");
 	Broodwar->setGUI(gui);	
 
 	Profiler::getInstance()->end("OnInit");
@@ -119,6 +118,7 @@ void MetaBot::gameStopped()
 	delete StrategySelector::getInstance();
 	delete MapManager::getInstance();
 	delete MatchData::getInstance();
+	delete Configuration::getInstance();
 }
 
 void MetaBot::onEnd(bool isWinner)

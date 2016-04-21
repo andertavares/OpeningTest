@@ -10,6 +10,7 @@ const string Configuration::CONFIG_FILE = Configuration::INPUT_DIR + "config.xml
 //xml field names
 const string Configuration::FIELD_BUILD_ORDER_ID = "build-order";
 const string Configuration::FIELD_MATCH_DATA_FILE = "match-output";
+const string Configuration::FIELD_METAGAME_FILE = "metagame-file";
 const string Configuration::FIELD_SPEED = "speed";
 const string Configuration::FIELD_ENABLE_GUI = "gui";
 
@@ -18,6 +19,7 @@ Configuration* Configuration::instance = NULL;
 Configuration::Configuration() {
 	//sets up default values
 	matchDataFile = OUTPUT_DIR + "output.xml";
+	metaGamefile = INPUT_DIR + "metagame.xml";
 	buildOrderID = "Quick Factory Mines";
 	speed = 0;
 	enableGUI = true;
@@ -43,7 +45,11 @@ void Configuration::parseConfig() {
 	int result = doc.LoadFile(CONFIG_FILE.c_str());
 
 	if (result != XML_NO_ERROR) {
-		Broodwar->printf("An error has occurred while parsing the configuration file '%s'. Error: '%s'", CONFIG_FILE.c_str(), doc.ErrorName());
+		Broodwar->printf(
+			"An error has occurred while parsing the configuration file '%s'. Error: '%s'", 
+			CONFIG_FILE.c_str(), 
+			doc.ErrorName()
+		);
 		return;
 	}
 	
@@ -59,9 +65,16 @@ void Configuration::parseConfig() {
 		speedElement->QueryIntAttribute("value", &speed);
 	}
 
+	//sets gui
 	XMLElement* guiElement = doc.FirstChildElement("config")->FirstChildElement(FIELD_ENABLE_GUI.c_str());
 	if (guiElement) {
 		guiElement->QueryBoolAttribute("value", &enableGUI);
+	}
+
+	//metagame file
+	XMLElement* metaGameElement = doc.FirstChildElement("config")->FirstChildElement(FIELD_METAGAME_FILE.c_str());
+	if (metaGameElement) {
+		metaGamefile = string(metaGameElement->Attribute("value"));
 	}
 
 

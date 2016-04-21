@@ -30,8 +30,6 @@ Commander::Commander()
 
 	noWorkersPerRefinery = 2;
 	noWorkers = 5;
-
-	Broodwar->printf("Commander on");
 }
 
 Commander::~Commander()

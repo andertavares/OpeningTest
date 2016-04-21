@@ -1,0 +1,7 @@
+<metagame>
+	<opening name="Marine Rush" probability="0.1" />
+	<opening name="Quick Bunker Factory" probability="0.3" />
+	<opening name="Quick Factory Mines" probability="0.3" />
+	<opening name="3 Rax Factory" probability="0.1" />
+	<opening name="1 Rax FE" probability="0.2" />
+</metagame>

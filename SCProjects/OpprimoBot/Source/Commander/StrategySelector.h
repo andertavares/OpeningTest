@@ -114,6 +114,9 @@ public:
 	/** Adds the result after a game is finished. */
 	void addResult(int win);
 
+	/** Chooses strategy according to probabilities in a metagame file and returns its name */
+	string metaGame();
+
 	/** Saves the stats file. */
 	void saveStats();
 

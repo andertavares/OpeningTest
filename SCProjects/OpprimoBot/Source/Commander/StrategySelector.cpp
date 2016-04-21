@@ -9,7 +9,9 @@
 #include "Zerg/LurkerRush.h"
 #include "Zerg/ZergMain.h"
 #include "../Data/Configuration.h"
+#include "../Utils/tinyxml2.h"
 #include <fstream>
+
 
 StrategySelector* StrategySelector::instance = NULL;
 
@@ -58,7 +60,12 @@ void StrategySelector::selectStrategy()
 	//Uncomment below to force the selection of a strategy for testing purposes
 	currentStrategyId = Configuration::getInstance()->buildOrderID;
 	Broodwar->printf("Selected strategy: %s", currentStrategyId.c_str());
-	return; 
+	
+	//in case of metagame, will choose strategy probabilistically
+	if (currentStrategyId == "metagame") {
+		currentStrategyId = metaGame();
+	}
+	return;
 
 	int totWon = 0;
 	int totPlay = 0;
@@ -108,6 +115,65 @@ void StrategySelector::selectStrategy()
 			}
 		}		
 	}
+}
+
+//TODO: it seems that metaGame deserves a class on its own
+string StrategySelector::metaGame() {
+	using namespace tinyxml2;
+
+	string defaultOpening = "Quick Bunker Factory";	//in case something go wrong
+
+	//parses the metagame file
+	map<string, float> openings;
+	
+	tinyxml2::XMLDocument doc;
+	int result = doc.LoadFile(Configuration::getInstance()->metaGamefile.c_str());
+
+	if (result != XML_NO_ERROR) {
+		Broodwar->printf(
+			"An error has occurred while parsing the metagame file '%s'. Error: '%s'", 
+			Configuration::getInstance()->metaGamefile.c_str(), 
+			doc.ErrorName()
+		);
+		return "Quick Bunker Factory";	//returns a default strategy
+	}
+
+	XMLElement* metaGameEntry = doc.FirstChildElement("metagame")->FirstChildElement("opening");
+	for ( ; metaGameEntry;  metaGameEntry = metaGameEntry->NextSiblingElement()) {
+		string name = string(metaGameEntry->Attribute("name"));
+		float probability = 0;
+		metaGameEntry->QueryFloatAttribute("probability", &probability);
+
+		openings.emplace(name, probability);
+	}
+
+
+	//openings loaded, now will select one
+	float sum = 0.f; //sum should add to 1.0, but this is to ensuer abnormal cases
+	for (auto opening : openings) {
+		sum += opening.second;
+	}
+
+	//generates a pseudo-random number between 0 and sum
+	float random = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / sum));
+
+	//traverses the list until we find an opening that matches the random number
+	float acc = 0;
+	for (auto opening : openings) {
+		if (random < acc + opening.second) {	//found!
+			Broodwar->printf(
+				"MetaBot chose: %s (random: %.3f, acc: %.3f, sum: %.3f)", 
+				opening.first.c_str(), random, acc, sum
+			);
+			return opening.first;
+		}
+		acc += opening.second;
+	}
+	Broodwar->printf(
+		"ERROR: opening was not randomly selected (random: %.3f, acc: %.3f, sum: %.3f). Defaulting to: %s.",
+		random, acc, sum, defaultOpening
+	);
+	return defaultOpening;	//something went wrong, opening was not randomly selected =/
 }
 
 Commander* StrategySelector::getStrategy()
