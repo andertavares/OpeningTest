@@ -22,7 +22,6 @@ StrategySelector::StrategySelector()
 	active = true;
 
     strategies.push_back(Strategy(Races::Terran, TextParserStrategy::getStrategyId()));
-
 	strategies.push_back(Strategy(Races::Protoss, ProtossMain::getStrategyId()));
 	strategies.push_back(Strategy(Races::Terran, OneRaxFE::getStrategyId()));
 	strategies.push_back(Strategy(Races::Terran, ThreeRaxFactory::getStrategyId()));
@@ -210,15 +209,17 @@ Commander* StrategySelector::getStrategy()
 	//end: new code - only select strategy, no counting from statistics
 
 	//Get Commander for strategy -- TODO: return a single "commander" that loads a pre-defined build-order
-	if (currentStrategyId == "ProtossMain") return new ProtossMain();
-	if (currentStrategyId == "TerranMain") return new TerranMain();
-	if (currentStrategyId == "1 Rax FE") return new OneRaxFE();
-	if (currentStrategyId == "3 Rax Factory") return new ThreeRaxFactory();
-	if (currentStrategyId == "Quick Factory Mines") return new QuickFactoryMines();
-	if (currentStrategyId == "Quick Bunker Factory") return new QuickBunkerFactory();
-	if (currentStrategyId == "Marine Rush") return new MarineRush();
-	if (currentStrategyId == "LurkerRush") return new LurkerRush();
-	if (currentStrategyId == "ZergMain") return new ZergMain();
+	if (currentStrategyId == ProtossMain::getStrategyId()) return new ProtossMain();
+	if (currentStrategyId == TerranMain::getStrategyId()) return new TerranMain();
+	if (currentStrategyId == OneRaxFE::getStrategyId()) return new OneRaxFE();
+	if (currentStrategyId == ThreeRaxFactory::getStrategyId()) return new ThreeRaxFactory();
+	if (currentStrategyId == QuickFactoryMines::getStrategyId()) return new QuickFactoryMines();
+	if (currentStrategyId == QuickBunkerFactory::getStrategyId()) return new QuickBunkerFactory();
+	if (currentStrategyId == MarineRush::getStrategyId()) return new MarineRush();
+	if (currentStrategyId == TextParserStrategy::getStrategyId()) return new TextParserStrategy();
+	if (currentStrategyId == LurkerRush::getStrategyId()) return new LurkerRush();
+	if (currentStrategyId == ZergMain::getStrategyId()) return new ZergMain();
+
 
 	return NULL;
 }

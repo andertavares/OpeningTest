@@ -60,12 +60,15 @@ void ParseUtils::ParseConfigFile(const std::string & filename, std::vector<Build
                 int type = ParseType(commandType, unittype, techtype, upgradetype);
 
                 if (type == UnitCode) {
+					Broodwar->printf("Pushing %s@%d to build plan", unittype.c_str(), atSupply);
                     buildplan.push_back(BuildplanEntry(unittype, atSupply));
                 }
                 else if (type == UpgradeCode) {
+					Broodwar->printf("Pushing %s@%d to build plan", upgradetype.c_str(), atSupply);
                     buildplan.push_back(BuildplanEntry(upgradetype, atSupply));
                 }
                 else if (type == TechCode) {
+					Broodwar->printf("Pushing %s@%d to build plan", techtype.c_str(), atSupply);
                     buildplan.push_back(BuildplanEntry(techtype, atSupply));
                 }
             }

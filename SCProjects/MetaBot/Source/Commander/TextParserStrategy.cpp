@@ -1,10 +1,11 @@
 #include "TextParserStrategy.h"
 #include "../ParseUtils.h"
+#include "../Data/Configuration.h"
 
 
 TextParserStrategy::TextParserStrategy() {
 
-    ParseUtils::ParseConfigFile("../../config.txt", buildplan);
+    ParseUtils::ParseConfigFile(Configuration::INPUT_DIR + "config.txt", buildplan);
 
 }
 
