@@ -1,7 +1,7 @@
 <!-- put this file under <starcraft>/bwapi-data/AI or <starcraft>/bwapi-data/read if in tournament -->
 <config>
-	<build-order value="Quick Bunker Factory" />
+	<build-order value="Text Parser Strategy" />
 	<match-output value="output.xml" />
 	<speed value="0" />
-	<gui value="false" />
+	<gui value="true" />
 </config>
