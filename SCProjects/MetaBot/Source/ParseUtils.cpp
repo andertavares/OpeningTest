@@ -5,6 +5,42 @@
 using namespace std;
 using namespace BWAPI;
 
+std::vector<char*> commandTypes{
+    "Command Center",
+    "Comsat Station",
+    "Nuclear Silo",
+    "Supply Depot",
+    "Barracks",
+    "Refinery",
+    "Engineering Bay",
+    "Bunker",
+    "Academy",
+    "Missile Turret",
+    "Factory",
+    "Machine Shop",
+    "Starport",
+    "Control Tower",
+    "Armory",
+    "Science Facility",
+    "Physics Lab",
+    "Covert Ops",
+    "StimPacks",
+    "Personnel Cloaking",
+    "Lockdown",
+    "Tank Siege Mode",
+    "EMP Shockwave",
+    "Yamato Gun",
+    "Terran Infantry Armor",
+    "Terran Infantry Weapons",
+    "Terran Ship Plating",
+    "Terran Ship Weapons",
+    "Terran Vehicle Plating",
+    "Terran Vehicle Weapons",
+    "Charon Boosters",
+    "Caduceus Reactor",
+    "U238 Shells"
+};
+
 void ParseUtils::ParseConfigFile(const string & filename, vector<BuildplanEntry>& buildplan) {
     rapidjson::Document doc;
     Race race = Races::Terran;
@@ -34,63 +70,30 @@ void ParseUtils::ParseConfigFile(const string & filename, vector<BuildplanEntry>
         return;
     }
 
-    if (doc.HasMember("Build name") && doc["Build name"].IsObject()) {
-        const rapidjson::Value &info = doc["Build name"];
-        std::vector<char*> commandTypes{
-            "Command Center",
-            "Comsat Station",
-            "Nuclear Silo",
-            "Supply Depot",
-            "Barracks",
-            "Refinery",
-            "Engineering Bay",
-            "Bunker",
-            "Academy",
-            "Missile Turret",
-            "Factory",
-            "Machine Shop",
-            "Starport",
-            "Control Tower",
-            "Armory",
-            "Science Facility",
-            "Physics Lab",
-            "Covert Ops",
-            "StimPacks",
-            "Personnel Cloaking",
-            "Lockdown",
-            "Tank Siege Mode",
-            "EMP Shockwave",
-            "Yamato Gun",
-            "Terran Infantry Armor",
-            "Terran Infantry Weapons",
-            "Terran Ship Plating",
-            "Terran Ship Weapons",
-            "Terran Vehicle Plating",
-            "Terran Vehicle Weapons",
-            "Charon Boosters",
-            "Caduceus Reactor",
-            "U238 Shells"
-        };
+    if (doc.HasMember("Itens") && doc["Itens"].IsArray()) {
+        const rapidjson::Value &info = doc["Itens"];
 
-        for (const auto& commandType : commandTypes) {
-            std::vector<int> atSupplies;
-            JSONTools::ReadArray(commandType, info, atSupplies);
+        std::vector<int> atSupplies;
+        UnitType unittype;
+        TechType techtype;
+        UpgradeType upgradetype;
 
-            UnitType unittype;
-            TechType techtype;
-            UpgradeType upgradetype;
+        for (rapidjson::SizeType i = 0; i < info.Size(); i++) {
+            const rapidjson::Value &buildOrder = info[i];
+            if (buildOrder.IsArray()) {
+                std::string name = buildOrder[0].GetString();
+                int atSupply = buildOrder[1].GetInt();
 
-            for (const auto& atSupply : atSupplies) {
-                int type = ParseType(commandType, unittype, techtype, upgradetype);
+                int type = ParseType(name, unittype, techtype, upgradetype);
 
                 if (type == UnitCode) {
-					buildplan.push_back(BuildplanEntry(unittype, atSupply));
+                    buildplan.push_back(BuildplanEntry(unittype, atSupply));
                 }
                 else if (type == UpgradeCode) {
-					buildplan.push_back(BuildplanEntry(upgradetype, atSupply));
+                    buildplan.push_back(BuildplanEntry(upgradetype, atSupply));
                 }
                 else if (type == TechCode) {
-					buildplan.push_back(BuildplanEntry(techtype, atSupply));
+                    buildplan.push_back(BuildplanEntry(techtype, atSupply));
                 }
             }
         }

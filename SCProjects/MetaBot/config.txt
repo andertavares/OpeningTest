@@ -1,8 +1,15 @@
 {
-	"Build name" :
-	{
-		"Supply Depot": [9, 16, 18, 20, 28],
-		"Barracks": [11, 13, 22],
-		"Refinery": [22]
-	}
+	"Name": "nome_da_build",
+	"Itens" :
+	[
+		["Supply Depot", 9],
+        ["Barracks", 11],
+        ["Supply Depot", 16],
+        ["Barracks", 13],
+        ["Supply Depot", 18],
+        ["Supply Depot", 20],
+        ["Barracks", 22],
+        ["Refinery", 22],
+        ["Supply Depot", 28]
+	]
 }
