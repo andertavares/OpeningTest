@@ -43,6 +43,9 @@ public:
 	//File to read configs from
 	static const string CONFIG_FILE;
 
+	//directory that stores openings (build orders)
+	static const string OPENINGS_DIR;
+
 	//xml field that contains the build order ID
 	static const string FIELD_BUILD_ORDER_ID;
 

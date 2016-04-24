@@ -1,6 +1,8 @@
-#include "TextParserStrategy.h"
+#include <fstream>
+#include <algorithm>
 
 #include "StrategySelector.h"
+#include "TextParserStrategy.h"
 #include "Protoss/ProtossMain.h"
 #include "Terran/TerranMain.h"
 #include "Terran\OneRaxFE.h"
@@ -12,7 +14,7 @@
 #include "Zerg/ZergMain.h"
 #include "../Data/Configuration.h"
 #include "../Utils/tinyxml2.h"
-#include <fstream>
+
 
 
 StrategySelector* StrategySelector::instance = NULL;
@@ -209,6 +211,12 @@ Commander* StrategySelector::getStrategy()
 	//end: new code - only select strategy, no counting from statistics
 
 	//Get Commander for strategy -- TODO: return a single "commander" that loads a pre-defined build-order
+	
+	//1 - check if stratetyID ends with .json to use text parser
+	if (currentStrategyId.substr(max(5, int(currentStrategyId.size())) - 5) == string(".json")) {
+		return new TextParserStrategy();
+	}
+
 	if (currentStrategyId == ProtossMain::getStrategyId()) return new ProtossMain();
 	if (currentStrategyId == TerranMain::getStrategyId()) return new TerranMain();
 	if (currentStrategyId == OneRaxFE::getStrategyId()) return new OneRaxFE();
@@ -217,6 +225,8 @@ Commander* StrategySelector::getStrategy()
 	if (currentStrategyId == QuickBunkerFactory::getStrategyId()) return new QuickBunkerFactory();
 	if (currentStrategyId == MarineRush::getStrategyId()) return new MarineRush();
 	if (currentStrategyId == TextParserStrategy::getStrategyId()) return new TextParserStrategy();
+
+
 	if (currentStrategyId == LurkerRush::getStrategyId()) return new LurkerRush();
 	if (currentStrategyId == ZergMain::getStrategyId()) return new ZergMain();
 

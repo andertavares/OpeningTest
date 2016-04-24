@@ -7,7 +7,9 @@ string TextParserStrategy::strategyID = "Text Parser Strategy";
 
 TextParserStrategy::TextParserStrategy() {
 
-    strategyID = ParseUtils::ParseOpeningFile(Configuration::INPUT_DIR + "config.txt", buildplan);
+    strategyID = ParseUtils::ParseOpeningFile(
+		Configuration::OPENINGS_DIR + Configuration::getInstance()->buildOrderID, buildplan
+	);
 
 }
 

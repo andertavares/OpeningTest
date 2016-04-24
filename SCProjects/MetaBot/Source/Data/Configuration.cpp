@@ -2,10 +2,14 @@
 #include "../Utils/tinyxml2.h"
 #include <BWAPI.h>
 
-//change these if you need to read/write in different folders
+//BEGIN: change these if you need to read/write in different folders
 const string Configuration::INPUT_DIR = "bwapi-data/AI/";
 const string Configuration::OUTPUT_DIR = "bwapi-data/AI/";
+//END: change these if you need to read/write in different folders
+
+//Unless you're programming MetaBot, don't change consts below
 const string Configuration::CONFIG_FILE = Configuration::INPUT_DIR + "config.xml";
+const string Configuration::OPENINGS_DIR = Configuration::INPUT_DIR + "openings/";
 
 //xml field names
 const string Configuration::FIELD_BUILD_ORDER_ID = "build-order";
@@ -20,7 +24,7 @@ Configuration::Configuration() {
 	//sets up default values
 	matchDataFile = OUTPUT_DIR + "output.xml";
 	metaGamefile = INPUT_DIR + "metagame.xml";
-	buildOrderID = "Quick Factory Mines";
+	buildOrderID = "QuickBunkerFactory.json";
 	speed = 0;
 	enableGUI = true;
 }
