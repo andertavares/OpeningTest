@@ -212,11 +212,12 @@ Commander* StrategySelector::getStrategy()
 
 	//Get Commander for strategy -- TODO: return a single "commander" that loads a pre-defined build-order
 	
-	//1 - check if stratetyID ends with .json to use text parser
+	//Step 1 - check if strategyID ends with .json to use text parser
 	if (currentStrategyId.substr(max(5, int(currentStrategyId.size())) - 5) == string(".json")) {
 		return new TextParserStrategy();
 	}
 
+	//Step 2 - check if strategyID matches a pre-programmed strategy
 	if (currentStrategyId == ProtossMain::getStrategyId()) return new ProtossMain();
 	if (currentStrategyId == TerranMain::getStrategyId()) return new TerranMain();
 	if (currentStrategyId == OneRaxFE::getStrategyId()) return new OneRaxFE();
@@ -225,11 +226,8 @@ Commander* StrategySelector::getStrategy()
 	if (currentStrategyId == QuickBunkerFactory::getStrategyId()) return new QuickBunkerFactory();
 	if (currentStrategyId == MarineRush::getStrategyId()) return new MarineRush();
 	if (currentStrategyId == TextParserStrategy::getStrategyId()) return new TextParserStrategy();
-
-
 	if (currentStrategyId == LurkerRush::getStrategyId()) return new LurkerRush();
 	if (currentStrategyId == ZergMain::getStrategyId()) return new ZergMain();
-
 
 	return NULL;
 }

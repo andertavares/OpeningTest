@@ -1,6 +1,6 @@
 <!-- put this file under <starcraft>/bwapi-data/AI or <starcraft>/bwapi-data/read if in tournament -->
 <config>
-	<build-order value="Text Parser Strategy" />
+	<build-order value="metagame" />
 	<match-output value="output.xml" />
 	<speed value="0" />
 	<gui value="true" />
