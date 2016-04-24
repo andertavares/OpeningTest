@@ -2,10 +2,12 @@
 #include "../ParseUtils.h"
 #include "../Data/Configuration.h"
 
+//initializes ID to a default name
+string TextParserStrategy::strategyID = "Text Parser Strategy";
 
 TextParserStrategy::TextParserStrategy() {
 
-    ParseUtils::ParseConfigFile(Configuration::INPUT_DIR + "config.txt", buildplan);
+    strategyID = ParseUtils::ParseOpeningFile(Configuration::INPUT_DIR + "config.txt", buildplan);
 
 }
 

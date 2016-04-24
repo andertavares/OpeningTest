@@ -15,7 +15,11 @@ namespace ParseUtils {
     const int UpgradeCode = 1;
     const int TechCode = 2;
 
-    void ParseConfigFile(const std::string & filename, std::vector<BuildplanEntry>& buildplan);
+	/**
+	 * Parses an opening/build-order file and returns the opening's 
+	 * name contained in the file
+	 */
+    string ParseOpeningFile(const std::string & filename, std::vector<BuildplanEntry>& buildplan);
     int ParseType(const std::string& commandType, UnitType& unitype, TechType& techtype, UpgradeType& upgradetype);
 }
 

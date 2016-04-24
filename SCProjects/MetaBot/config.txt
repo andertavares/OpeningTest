@@ -1,6 +1,6 @@
 {
-	"Name": "nome_da_build",
-	"Itens" :
+	"name": "nome_da_build",
+	"items" :
 	[
 		["Supply Depot", 9],
         ["Barracks", 11],

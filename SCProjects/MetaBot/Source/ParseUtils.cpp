@@ -5,7 +5,7 @@
 using namespace std;
 using namespace BWAPI;
 
-std::vector<char*> commandTypes{
+vector<char*> commandTypes{
     "Command Center",
     "Comsat Station",
     "Nuclear Silo",
@@ -41,14 +41,16 @@ std::vector<char*> commandTypes{
     "U238 Shells"
 };
 
-void ParseUtils::ParseConfigFile(const string & filename, vector<BuildplanEntry>& buildplan) {
+string ParseUtils::ParseOpeningFile(const string & filename, vector<BuildplanEntry>& buildplan) {
     rapidjson::Document doc;
     Race race = Races::Terran;
+
+	string openingName = "Undefined";	//if not found in file, will return this default
 
     string text;
     ifstream inputFile(filename);
     if (inputFile.is_open()) {
-        std::string line; /* or other suitable maximum line size */
+        string line; /* or other suitable maximum line size */
         do {
             getline(inputFile, line);
             text = text + line + "\n";
@@ -63,17 +65,24 @@ void ParseUtils::ParseConfigFile(const string & filename, vector<BuildplanEntry>
     bool parsingFailed = doc.Parse(text.c_str()).HasParseError();
     if (parsingFailed) {
         Broodwar->printf("Parsing Failed");
-        return;
+        return "Parsing Failed";	//indicates that an error has happened
     }
 
     if (text.length() == 0) {
-        return;
+        return "Empty JSON";	//indicates that config file is empty
     }
 
-    if (doc.HasMember("Itens") && doc["Itens"].IsArray()) {
-        const rapidjson::Value &info = doc["Itens"];
+	//looks up opening name
+	if (doc.HasMember("name") && doc["name"].IsString()) {
+		openingName = doc["name"].GetString();
+		Broodwar->printf("Found build named '%s'", openingName.c_str());
+	}
 
-        std::vector<int> atSupplies;
+	//traverse opening items
+    if (doc.HasMember("items") && doc["items"].IsArray()) {
+        const rapidjson::Value &info = doc["items"];
+
+        vector<int> atSupplies;
         UnitType unittype;
         TechType techtype;
         UpgradeType upgradetype;
@@ -81,7 +90,7 @@ void ParseUtils::ParseConfigFile(const string & filename, vector<BuildplanEntry>
         for (rapidjson::SizeType i = 0; i < info.Size(); i++) {
             const rapidjson::Value &buildOrder = info[i];
             if (buildOrder.IsArray()) {
-                std::string name = buildOrder[0].GetString();
+                string name = buildOrder[0].GetString();
                 int atSupply = buildOrder[1].GetInt();
 
                 int type = ParseType(name, unittype, techtype, upgradetype);
@@ -98,10 +107,11 @@ void ParseUtils::ParseConfigFile(const string & filename, vector<BuildplanEntry>
             }
         }
     }
+	return openingName;
 }
 
 
-int ParseUtils::ParseType(const std::string& commandType, UnitType& unitype, TechType& techtype, UpgradeType& upgradetype) {
+int ParseUtils::ParseType(const string& commandType, UnitType& unitype, TechType& techtype, UpgradeType& upgradetype) {
     if (commandType == "Command Center") {
         unitype = UnitTypes::Terran_Command_Center;
         return ParseUtils::UnitCode;
