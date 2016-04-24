@@ -1,5 +1,5 @@
 #include "TextParserStrategy.h"
-#include "../ParseUtils.h"
+#include "../Utils/ParseUtils.h"
 #include "../Data/Configuration.h"
 
 //initializes ID to a default name

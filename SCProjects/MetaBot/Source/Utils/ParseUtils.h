@@ -8,7 +8,7 @@
 #include <BWAPI.h>
 #include "rapidjson/document.h"
 #include "JSONTools.h"
-#include "Managers/BuildplanEntry.h"
+#include "../Managers/BuildplanEntry.h"
 
 namespace ParseUtils {
     const int UnitCode = 0;
