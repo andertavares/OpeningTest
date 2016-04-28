@@ -1,0 +1,19 @@
+{
+	"name": "2 Fact Vults",
+	"comment": "Found at http://wiki.teamliquid.net/starcraft/2_Fact_Vults_%28vs._Terran%29",
+	"note": "Machine Shop must be built right after Factory gets ready",
+	"items" :
+	[
+		["Supply Depot", 9],
+        ["Barracks", 11],
+		["Refinery", 11],
+        ["Factory", 15],
+        ["Supply Depot", 16],
+        ["Factory", 18],
+        ["Machine Shop", 18],
+        ["Spider Mines", 20],
+        ["Ion Thrusters", 20],
+        ["Control Tower", 28],
+        ["Supply Depot", 28]
+	]
+}

@@ -1,0 +1,21 @@
+{
+	"name": "3 Factory Vultures",
+	"comment": "http://wiki.teamliquid.net/starcraft/Three_Factory_Vultures",
+	"note": "Machine Shops must be ready as soon as a factory gets ready",
+	"items" :
+	[
+		["Supply Depot", 9],
+        ["Barracks", 11],
+		["Refinery", 11],
+        ["Supply Depot", 15],
+        ["Factory", 18],
+        ["Factory", 20],
+        ["Machine Shop", 22],
+        ["Supply Depot", 22],
+        ["Machine Shop", 24],
+        ["Ion Thrusters", 25],
+        ["Supply Depot", 30],
+        ["Factory", 32],
+        ["Spider Mines", 32]
+	]
+}
