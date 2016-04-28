@@ -1,0 +1,18 @@
+{
+	"name": "1 Port Wraith v1",
+	"comment": "Found at http://wiki.teamliquid.net/starcraft/1_Port_Wraith_%28vs._Terran%29",
+	"note": "Machine Shop must be built right after Factory gets ready, same for Control Tower and Starport",
+	"items" :
+	[
+		["Supply Depot", 9],
+        ["Barracks", 12],
+		["Refinery", 12],
+        ["Factory", 16],
+        ["Supply Depot", 17],
+        ["Machine Shop", 22],
+        ["Starport", 24],
+        ["Supply Depot", 24],
+        ["Control Tower", 28],
+        ["Supply Depot", 28]
+	]
+}

@@ -1,0 +1,16 @@
+{
+	"name": "Fantasy's 13CC",
+	"comment": "Found at http://wiki.teamliquid.net/starcraft/14_CC_%28vs._Terran%29#fantasy.27s_13_Command_Center",
+	"items" :
+	[
+		["Supply Depot", 9],
+        ["Command Center", 13],
+		["Barracks", 15],
+        ["Refinery", 15],
+        ["Supply Depot", 16],
+        ["Factory", 20],
+        ["Bunker", 23],
+        ["Starport", 26],
+        ["Refinery", 26]
+	]
+}

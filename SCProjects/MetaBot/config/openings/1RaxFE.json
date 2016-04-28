@@ -1,0 +1,14 @@
+{
+	"name": "QuickBunkerFactory",
+	"comment": "Fount at http://wiki.teamliquid.net/starcraft/1_Rax_FE_(vs._Terran)",
+	"items" :
+	[
+		["Supply Depot", 9],
+        ["Barracks", 11],
+		["Command Center", 15],
+		["Refinery", 15],
+        ["Supply Depot", 16],
+		["Bunker", 20],
+        ["Factory", 21]
+	]
+}

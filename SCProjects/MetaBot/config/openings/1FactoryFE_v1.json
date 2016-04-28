@@ -1,0 +1,18 @@
+{
+	"name": "1 Factory Fast Expand v1",
+	"comment": "This is variation one of http://wiki.teamliquid.net/starcraft/1_Fact_FE_%28vs._Terran%29",
+	"items" :
+	[
+		["Supply Depot", 9],
+        ["Barracks", 12],
+		["Refinery", 12],
+        ["Supply Depot", 15],
+        ["Factory", 16],
+        ["Machine Shop", 20],
+        ["Tank Siege Mode", 22],
+		["Supply Depot", 23],
+        ["Command Center", 28],
+        ["Supply Depot", 28],
+        ["Factory", 32]
+	]
+}
